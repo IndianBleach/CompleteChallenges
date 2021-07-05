@@ -18,5 +18,9 @@ namespace Project.Models
             ProgLanguage = lang;
             TestContent = solutionContent;
         }
+
+        public Test()
+        { 
+        }
     }
 }

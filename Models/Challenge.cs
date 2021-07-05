@@ -14,6 +14,15 @@ namespace Project.Models
         public ICollection<Solution> Solutions { get; set; }
         public ICollection<Test> Tests { get; set; }
         public ICollection<User> UsersWhoUnlocked { get; set; }
+        public ICollection<Tag> Tags { get; set; }
         public DateTime DateCreated { get; set; }
+
+        public Challenge()
+        {
+            Solutions = new List<Solution>();
+            Tests = new List<Test>();
+            UsersWhoUnlocked = new List<User>();
+            Tags = new List<Tag>();            
+        }
     }
 }

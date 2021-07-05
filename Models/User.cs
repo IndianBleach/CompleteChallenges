@@ -10,6 +10,8 @@ namespace Project.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<User> Users { get; set; }
+        public UserRole() =>            
+            Users = new List<User>();       
     }
 
     public class User
@@ -27,5 +29,15 @@ namespace Project.Models
         public int RoleId { get; set; }
         public UserRole Role { get; set; }
         public DateTime DateCreated { get; set; }
+
+        public User()
+        {
+            MySolutions = new List<Solution>();
+            MyChallenges = new List<Challenge>();
+            UnlockedChallenges = new List<Challenge>();
+            MyDiscusses = new List<Discuss>();
+            Replies = new List<Reply>();
+            Events = new List<UserEvent>();
+        }
     }
 }

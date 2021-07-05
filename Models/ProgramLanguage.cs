@@ -11,5 +11,11 @@ namespace Project.Models
         public string Name { get; set; }
         public ICollection<Test> Tests { get; set; }
         public ICollection<Solution> Solutions { get; set; }
+
+        public ProgramLanguage()
+        {
+            Tests = new List<Test>();
+            Solutions = new List<Solution>();
+        }
     }
 }

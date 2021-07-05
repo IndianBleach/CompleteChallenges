@@ -13,6 +13,9 @@ namespace Project.Models
         public string Content { get; set; }
         public ICollection<Reply> Replies { get; set; }
         public DateTime DateCreated { get; set; }
+
+        public Discuss() =>
+            Replies = new List<Reply>();
     }
 
     public class Reply
@@ -21,6 +24,6 @@ namespace Project.Models
         public Discuss Discuss { get; set; }
         public User Author { get; set; }
         public string Content { get; set; }
-        public DateTime DateCreated { get; set; }
+        public DateTime DateCreated { get; set; }         
     }
 }

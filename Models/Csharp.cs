@@ -33,6 +33,10 @@ namespace Project.Models
             : base(challenge, lang, testContent)
         {
         }
+
+        public CsharpTest()
+        { 
+        }
     }
     #endregion
 }
