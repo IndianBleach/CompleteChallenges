@@ -1,0 +1,61 @@
+﻿@model Project.Models.ValidModels.UserRegister
+
+@{
+    Layout = "_OutFormLayout";
+}
+
+<form asp-action="register" method="post" asp-controller="authorize" class="col-10 col-sm-8 col-md-6 col-xl-5 bg-white border rounded pb-4 pt-4 p-2">
+    <div class="mb-4 text-center">
+        <h5><kbd>CodeBreed</kbd></h5>
+    </div>
+    <div class="form-group ps-2">
+        <input placeholder="Имя пользователя"
+               asp-for="Username"
+               type="text"
+               class="form-control form-control-sm"
+               id="username" />
+    </div>
+    <div class="form-group mt-3 ps-2">
+        <input placeholder="Email"
+               asp-for="Email"
+               type="email"
+               class="form-control form-control-sm"
+               id="email" />
+    </div>
+    <div class="form-group mt-3 ps-2">
+        <input placeholder="Пароль"
+               asp-for="Password"
+               type="password"
+               class="form-control form-control-sm"
+               id="exampleInputPassword1" />
+    </div>
+    <div class="form-group mt-3 ps-2">
+        <input placeholder="Повторите пароль"
+               asp-for="PasswordConfirm"
+               type="password"
+               class="form-control form-control-sm"
+               id="confPass" />
+    </div>
+    <div class="d-flex flex-column col-12 mt-3 justify-content-center ps-4">
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="mt-2 col-8 btn btn-primary">
+                Регистрация
+            </button>
+        </div>
+        <div class="mt-1 text-center">
+            <a href="#">Забыли пароль</a>
+        </div>
+        <hr class="col-12" />
+        <div class="text-center">
+            <p>Уже есть аккаунт? Выполните вход</p>
+        </div>
+        <div class="d-flex justify-content-center">
+            <a 
+               asp-action="login"
+               asp-controller="authorize"
+               class="mt-0 col6 btn btn-outline-primary">
+                Вход
+            </a>
+        </div>
+    </div>
+</form>

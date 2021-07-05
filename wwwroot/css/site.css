@@ -1,0 +1,10 @@
+﻿
+#mainContainer {
+    margin-top: 10rem;
+}
+
+.btn {
+    font-size: 11px!important;
+    text-transform: uppercase!important;
+    height: 25px!important;
+}

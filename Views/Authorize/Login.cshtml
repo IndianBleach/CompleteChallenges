@@ -1,0 +1,47 @@
+﻿@model Project.Models.ValidModels.UserLogin
+
+@{
+    Layout = "_OutFormLayout";
+}
+
+<form asp-action="login" asp-controller="authorize" method="post" class="col-10 col-sm-8 col-md-6 col-xl-5 bg-white border rounded pb-4 pt-4 p-2">
+    <div class="mb-4 text-center">
+        <h5><kbd>CodeBreed</kbd></h5>
+    </div>
+    <div class="form-group ps-2">
+        <input placeholder="Имя пользователя"
+               asp-for="Username"
+               type="text"
+               class="form-control form-control-sm"
+               id="username"
+               aria-describedby="emailHelp" />
+    </div>
+    <div class="form-group mt-3 ps-2">
+        <input placeholder="Пароль"
+               asp-for="Password"
+               type="password"
+               class="form-control form-control-sm"
+               id="exampleInputPassword1" />
+    </div>
+    <div class="d-flex flex-column col-12 mt-3 justify-content-center ps-4">
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="mt-2 col-6 btn btn-primary">
+                Вход
+            </button>
+        </div>
+        <div class="mt-1 text-center">
+            <a href="#">Забыли пароль</a>
+        </div>
+        <hr class="col-12" />
+        <div class="text-center">
+            <p>Нет аккаунта CodeBreed? Создайте его</p>
+        </div>
+        <div class="d-flex justify-content-center">
+            <a asp-action="register"
+               asp-controller="authorize"
+               class="mt-0 col-8 btn btn-outline-primary">
+                Регистрация
+            </a>
+        </div>
+    </div>
+</form>
