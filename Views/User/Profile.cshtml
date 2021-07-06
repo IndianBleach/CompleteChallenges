@@ -1,0 +1,87 @@
+﻿@model Project.Models.User
+
+@{
+    Layout = "_Layout";
+}
+
+<section>
+    <div class="container bg-light" id="profileBlock">
+        <div class="col-12 justify-content-center pt-5 d-flex">
+            <div class="col-4 col-xl-3 justify-content-center d-flex">
+                <div>
+                    <div id="profileAvatar"></div>
+                    <div class="text-start">
+                        <h4>@Model?.Username</h4>
+                        @if (ViewBag.SelfUserProfile == true && User.Identity.IsAuthenticated)
+                        { 
+                            <p>@Model?.Email</p>
+                        }
+                    </div>
+                    <div class="d-flex flex-column mt-3 mb-2">
+                        @if (ViewBag.SelfUserProfile == true && User.Identity.IsAuthenticated)
+                        {
+                            <a class="btn btn-outline-primary">Редактировать</a>
+                            <a class="btn btn-outline-danger" asp-action="logout" asp-controller="authorize">Выйти</a>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col me-4">
+                <div class="col-11 d-flex justify-content-around">
+                    <div>
+                        <p>Решений: @Model?.MySolutions?.Count()</p>
+                        <p>Комментариев: @Model?.MyDiscusses?.Count()</p>
+                    </div>
+                    <div class="ms-2">
+                        <p>Создано: @Model?.MyChallenges?.Count()</p>
+                        <p>Нет решений: @Model?.UnlockedChallenges?.Count()</p>
+                    </div>
+                </div>
+                <div class="m-1 mt-4 col-11">
+                    <div id="profileActivityBlock"
+                         class="overflow-hidden d-flex justify-content-end position-relative bg-white pt-2">
+                        <div class="col justify-content-end position-absolute">
+                            <svg height="20" width="832">
+                                <text x="25" y="15" width="20">Июль</text>
+                                <text x="85" y="15" width="20">Авг</text>
+                                <text x="155" y="15" width="20">Сен</text>
+                                <text x="225" y="15" width="20">Окт</text>
+                                <text x="295" y="15" width="20">Нояб</text>
+                                <text x="365" y="15" width="20">Дек</text>
+                                <text x="435" y="15" width="20">Янв</text>
+                                <text x="505" y="15" width="20">Февраль</text>
+                                <text x="575" y="15" width="20">Март</text>
+                                <text x="645" y="15" width="20">Апрель</text>
+                                <text x="715" y="15" width="20">Май</text>
+                                <text x="775" y="15" width="20">Июнь</text>
+                            </svg>
+                            <svg class="grider mt-1 ms-4" height="130" width="832">
+                                <text x="780" y="20" width="20">Пон</text>
+                                <text x="780" y="55" width="20">Чтв</text>
+                                <text x="780" y="90" width="20">Воск</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="text-center mt-5">
+                <h4>Задания от @Model?.Username</h4>
+                @if (Model?.MyChallenges?.Count() > 0)
+                {
+                    
+                }
+                else
+                { 
+                    <p>Этот пользователь пока не опубликовал заданий</p>
+                }
+            </div>
+            <div></div>
+        </div>
+    </div>
+</section>
+@section scripts {
+    <script type="text/javascript" src="~/js/buildUserActivityBlock.js"></script>
+}
+

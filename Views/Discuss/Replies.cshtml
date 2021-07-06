@@ -1,0 +1,49 @@
+﻿@model Project.Models.Discuss
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container-fluid mt-4">
+    <section>
+        <div class="mb-2 mt-4">
+            <div class="bg-white col-12 mb-2">
+                <div class="p-2">
+                    <h5>
+                        @Model.Name
+                        <span class="text-muted fs-6">
+                            <img height="25" width="25" />
+                            @Model.Author.Username
+                        </span>
+                    </h5>
+                    <p>
+                        @Model.Content
+                    </p>
+                    <div class="d-flex col-12 justify-content-between">
+                        <div>
+                            <span class="text-muted me-4 mb-0">@Model.DateCreated</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="mt-4">
+        <form asp-action="createreply" asp-controller="discuss">
+            <input name="discussId" value="@Model.Id" hidden/>
+            <div class="form-group mt-2">
+                <textarea name="replyContent"
+                          class="form-control form-control-sm"
+                          id="exampleFormControlTextarea1"
+                          rows="3"
+                          placeholder="Поделитесь ответом на вопрос и в следующий раз помогут вам!"></textarea>
+            </div>
+            <button type="submit" class="mt-2 btn btn-outline-primary">
+                Ответить
+            </button>
+        </form>
+        <div class="col-12 mt-4">
+            @await Component.InvokeAsync("ReplyList")
+        </div>
+    </div>
+</div>

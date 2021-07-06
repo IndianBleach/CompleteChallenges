@@ -7,22 +7,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Project.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Project.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private ApplicationContext _ctx;
 
         public HomeController(ILogger<HomeController> logger, ApplicationContext ctx)
-        {                                   
+        {
             _logger = logger;
+            _ctx = ctx;
         }
 
-        [Authorize]
-        public IActionResult Index()
-        {         
-            return View();
+        public async Task<IActionResult> Index()
+        {
+            List<Challenge> challenges = await _ctx.Challenges
+                .Include(x => x.Author)
+                .Include(x => x.Tests)
+                .Include(x => x.Likes)
+                .ToListAsync();
+
+            //viewbag discusses
+
+            return View(challenges);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

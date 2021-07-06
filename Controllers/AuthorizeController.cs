@@ -22,6 +22,12 @@ namespace Project.Controllers
         }
 
         #region :POST ENDPOINTS
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("login", "authorize");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(UserLogin logUser)
@@ -66,6 +72,8 @@ namespace Project.Controllers
                         MyDiscusses = new List<Discuss>(),
                         MySolutions = new List<Solution>(),
                         Replies = new List<Reply>(),
+                        Score = 0,
+                        ChallengeLikes = new List<ChallengeLike>(),                        
                         UnlockedChallenges = new List<Challenge>(),
                         Role = await _ctx.UserRoles.FirstOrDefaultAsync(x =>
                             x.Name == "user")
@@ -103,11 +111,6 @@ namespace Project.Controllers
         #region :GET ENDPOINTS
         [HttpGet]
         public IActionResult Login()
-        {
-            return View();
-        }
-
-        public IActionResult Logout()
         {
             return View();
         }

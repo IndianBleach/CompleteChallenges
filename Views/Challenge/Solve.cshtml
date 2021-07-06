@@ -1,0 +1,44 @@
+﻿@model Project.Models.Challenge
+
+@{
+    Layout = "_Layout";
+}
+
+<section>
+    @await Component.InvokeAsync("challengeDetail") 
+</section>
+<section>
+    <div class="col-12 d-flex bg-white p-2">
+        <div class="col-6 pe-2 user__code__wrapper">
+            <div>
+                <h5>C# Решение</h5>
+            </div>
+            <div class="">
+                <textarea class="form-control"
+                          id="exampleFormControlTextarea1"
+                          rows="18"></textarea>
+            </div>
+            <div class="col-12 pe-4 ps-4 mt-2 d-flex justify-content-between">
+                <button class="btn btn-outline-primary">Вернуться</button>
+                <button class="ms-4 btn btn-outline-primary">
+                    Тестировать
+                </button>
+            </div>
+        </div>
+        <div class="col-6">
+            <h5>Результат</h5>
+            <div class="border p-2 user__code__wrapper bg-light">
+                <pre data-enlighter-language="less"
+                     class="pb-0 mb-0 position-absolute">
+item.Tests.First().TestContent
+</pre>
+            </div>
+            <div class="col-12 mt-2 d-flex pe-4 ps-4 justify-content-between">
+                <button class="btn btn-outline-primary">Открыть решения</button>
+                <button class="ms-4 btn btn-outline-success">
+                    Отправить
+                </button>
+            </div>
+        </div>
+    </div>
+</section>

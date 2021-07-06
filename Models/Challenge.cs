@@ -11,6 +11,8 @@ namespace Project.Models
         public User Author { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public int Score { get; set; }
+        public ICollection<ChallengeLike> Likes { get; set; }
         public ICollection<Solution> Solutions { get; set; }
         public ICollection<Test> Tests { get; set; }
         public ICollection<User> UsersWhoUnlocked { get; set; }
@@ -19,10 +21,18 @@ namespace Project.Models
 
         public Challenge()
         {
+            Likes = new List<ChallengeLike>();
             Solutions = new List<Solution>();
             Tests = new List<Test>();
             UsersWhoUnlocked = new List<User>();
             Tags = new List<Tag>();            
         }
+    }
+
+    public class ChallengeLike 
+    { 
+        public int Id { get; set; }
+        public User Author { get; set; }
+        public Challenge OnChallenge { get; set; }
     }
 }

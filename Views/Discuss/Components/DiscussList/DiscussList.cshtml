@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Project.Models.Discuss>
+
+@foreach (var item in Model)
+{
+    <div class="bg-white col-12 mb-2">
+        <div class="p-2">
+            <h5>
+                @item.Name
+                <span class="text-muted fs-6"><img height="25" width="25" /> @item.Author.Username</span>
+            </h5>
+            <p>
+                @item.Content
+            </p>
+            <div class="d-flex col-12 justify-content-between">
+                <div>
+                    <a asp-action="replies" asp-controller="discuss" asp-route-discuss="@item.Id" class="btn btn-outline-primary">
+                        Посмотреть ответы
+                    </a>
+                    <span class="ms-2">Ответов: @item.Replies.Count()</span>
+                </div>
+                <div>
+                    <span class="text-muted me-4 mb-0">@item.DateCreated</span>
+                </div>
+            </div>
+        </div>
+    </div>
+}

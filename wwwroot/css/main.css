@@ -1,0 +1,58 @@
+﻿#mainContainer {
+    min-height: 94vh;
+}
+
+.btn {
+    height: 25px !important;
+    padding: 3px;
+}
+
+.challenge__card p {
+    font-size: 14px !important;
+}
+
+.challenge__code {
+    max-height: 190px;
+    overflow-y: scroll;
+}
+
+@media (min-width: 128px) {
+    #mainContainer {
+        display: block !important;
+    }
+}
+
+@media (min-width: 628px) {
+    #mainContainer {
+        display: flex !important;
+    }
+}
+
+/*PROFILE*/
+#profileBlock {
+    min-height: 320px;
+}
+
+#profileAvatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: darkgray;
+}
+
+#profileActivityBlock {
+    min-height: 150px;
+}
+
+svg text {
+    font-size: 12px;
+}
+
+#activityResultPopup {
+    display: contents;
+}
+
+    #activityResultPopup p {
+        font-size: 12px;
+        z-index: 1000 !important;
+    }

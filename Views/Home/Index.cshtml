@@ -1,7 +1,83 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<Project.Models.Challenge>
+
+@{
+    ViewData["Title"] = "Главная";
+    Layout = "_Layout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome @User.Identity.Name</h1>    
-</div>
+
+<section>
+    <div class="m-2">
+        <h4>Задания сообщества</h4>
+    </div>
+    @foreach (var item in Model)
+    {
+    <div class="challenge__card mb-2 border rounded col-12 d-flex bg-white">
+        <div class="col-6">
+            <div class="p-2 ps-3">
+                <h4>
+                    <b>@item.Name</b>
+                    <span class="text-warning fs-6"><i>Любитель</i></span>
+                </h4>
+                <p>
+                    @item.Description
+                </p>
+                <p class="mb-0">return <b class="text-danger fs-6">Int</b></p>
+                <p class="text-muted">tags tags tags tags</p>
+                <div class="d-flex">
+                    <span>Лайков: 00</span>
+                    <span class="ms-2">Решений: @item.Solutions.Count()</span>
+                    <span class="ms-2">Не справилось: @item.UsersWhoUnlocked.Count()</span>
+                </div>
+                <div class="d-flex">
+                    @foreach (var lang in item.Tests)
+                    {
+                        <a class="btn me-4 btn-outline-primary" asp-action="solve" asp-route-challenge="@item.Id" asp-controller="challenge">Выполнить @lang.ProgLanguage.Name</a>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-6 align-items-start d-flex">
+            <div class="me-4 m-2 col-12">
+                <div class="p-2 challenge__code position-relative rounded border-bottom">
+<pre data-enlighter-language="less" class="pb-0 mb-0 position-absolute">
+    @item.Tests.First().TestContent
+</pre>
+                </div>
+                <div class="p-2 col-12 d-flex justify-content-between">
+                    <div>
+                        <p class="mb-0 text-danger"><b>Score</b></p>
+                    </div>
+                    <div class="d-flex">
+                        <img src="#" height="25" width="25" />
+                        <p class="mb-0">
+                            @item.Author.Username <span class="text-muted">@item.DateCreated</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }            
+</section>
+<section>
+    <div class="m-2">
+        <h4>Обсуждения сообщества</h4>
+    </div>
+</section>
+    
+@section scripts {
+    <script type="text/javascript" src="~/dist/enlighterjs.min.js"></script>
+    <script type="text/javascript">
+            // INIT CODE - simple page-wide initialization based on css selectors
+            // - highlight all pre + code tags (CSS3 selectors)
+            // - use javascript as default language
+            // - use theme "enlighter" as default theme
+            // - replace tabs with 2 spaces
+            EnlighterJS.init("pre", "code", {
+                language: "python",
+                theme: "bootstrap4",
+                indent: 2
+            });
+    </script>
+}

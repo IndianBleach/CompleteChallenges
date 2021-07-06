@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Project.Models.Discuss>
+
+@{
+    Layout = "_Layout";
+}
+
+<section>
+    <div class="container-fluid mt-4">
+        <div class="col-12 text-center mb-4">
+            <h4>Обсуждения сообщества</h4>
+        </div>
+        <section>
+            <div>
+                <form asp-action="creatediscuss" asp-controller="discuss">
+                    <div class="form-group col-10 col-sm-6">
+                        <input name="discussName"
+                               type="text"
+                               class="form-control form-control-sm"
+                               id="title"
+                               placeholder="Название" />
+                    </div>
+                    <div class="form-group mt-2">
+                        <textarea name="discussContent"
+                                  class="form-control form-control-sm"
+                                  id="exampleFormControlTextarea1"
+                                  rows="3"
+                                  placeholder="Задайте вопрос, опишите ситуацию, интересуйтесь новым"></textarea>
+                    </div>
+                    <button type="submit" class="mt-2 btn btn-primary">
+                        Submit
+                    </button>
+                </form>
+
+            </div>
+        </section>
+        <section>
+            <div class="mb-2 mt-4">
+                @await Component.InvokeAsync("DiscussList")
+            </div>
+        </section>
+    </div>
+</section>

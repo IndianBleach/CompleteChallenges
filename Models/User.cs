@@ -20,6 +20,8 @@ namespace Project.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
+        public int Score { get; set; }
+        public ICollection<ChallengeLike> ChallengeLikes { get; set; }
         public ICollection<Solution> MySolutions { get; set; }
         public ICollection<Challenge> MyChallenges { get; set; }
         public ICollection<Challenge> UnlockedChallenges { get; set; }
