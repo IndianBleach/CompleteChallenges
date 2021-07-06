@@ -2,6 +2,10 @@
     min-height: 94vh;
 }
 
+#tagChoiceSelect {
+    height: 115px;
+}
+
 .btn {
     height: 25px !important;
     padding: 3px;
@@ -13,6 +17,7 @@
 
 .challenge__code {
     max-height: 190px;
+
     overflow-y: scroll;
 }
 
@@ -56,3 +61,8 @@ svg text {
         font-size: 12px;
         z-index: 1000 !important;
     }
+
+/*SOLVE PAGE*/
+.user__code__wrapper {
+    height: 446px;
+}

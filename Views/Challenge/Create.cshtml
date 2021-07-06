@@ -15,25 +15,28 @@
         <section>
             <div class="col-12 justify-content-center mt-2">
                 <div class="container justify-content-center d-flex bg-white border rounded p-2">
-                    <form class="col-12 bg-light p-2">
+                    <form class="col-12 bg-light p-2" asp-action="create" asp-controller="challenge" method="post">
                         <div class="col-12 d-flex">
                             <div class="form-group col-6 pe-2">
                                 <p class="mb-0"><kbd>Название</kbd></p>
-                                <input type="text"
+                                <input asp-for="Name"
+                                       type="text"
                                        class="form-control form-control-sm"
                                        id="title"
                                        placeholder="Введите название" />
                                 <p class="mt-2 mb-0">
                                     <kbd>Описание</kbd>
                                 </p>
-                                <textarea class="form-control form-control-sm"
+                                <textarea asp-for="Description"
+                                          class="form-control form-control-sm"
                                           id="exampleFormControlTextarea1"
                                           rows="5"
                                           placeholder="Введите описание"></textarea>
                             </div>
                             <div class="form-group col-6">
                                 <p class="mb-0"><kbd>Python тесты</kbd></p>
-                                <textarea class="form-control form-control-sm"
+                                <textarea asp-for="PythonTest"
+                                          class="form-control form-control-sm"
                                           id="exampleFormControlTextarea1"
                                           rows="8"
                                           placeholder=""></textarea>
@@ -42,30 +45,37 @@
                         <div class="mt-3 col-12 d-flex">
                             <div class="form-group col-6 pe-2">
                                 <p class="mb-0"><kbd>Уровень</kbd></p>
-                                <select class="form-control form-control-sm"
+                                <select asp-for="Level"
+                                        class="form-control form-control-sm"
                                         id="exampleFormControlSelect2">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
+                                    @if (ViewBag.Levels != null)
+                                    {
+                                        @foreach (var item in ViewBag.Levels)
+                                        {
+                                            <option>@item.Name</option>
+                                        }
+                                    }
                                 </select>
                                 <p class="mt-2 mb-0">
                                     <kbd>Теги</kbd>
                                 </p>
-                                <select multiple
+                                <select asp-for="Tags"
+                                        multiple
                                         class="form-control form-control-sm"
-                                        id="exampleFormControlSelect2">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
+                                        id="tagChoiceSelect">
+                                    @if (ViewBag.Tags != null)
+                                    {
+                                        @foreach (var item in ViewBag.Tags)
+                                        {
+                                            <option>@item.Name</option>
+                                        }
+                                    }
                                 </select>
                             </div>
                             <div class="form-group col-6">
                                 <p class="mb-0"><kbd>C# тесты</kbd></p>
-                                <textarea class="form-control form-control-sm"
+                                <textarea asp-for="CsharpTest"
+                                          class="form-control form-control-sm"
                                           id="exampleFormControlTextarea1"
                                           rows="8"
                                           placeholder=""></textarea>
@@ -113,3 +123,19 @@
         </section>
     </div>
 </section>
+
+@section scripts {
+    <script type="text/javascript" src="~/dist/enlighterjs.min.js"></script>
+    <script type="text/javascript">
+            // INIT CODE - simple page-wide initialization based on css selectors
+            // - highlight all pre + code tags (CSS3 selectors)
+            // - use javascript as default language
+            // - use theme "enlighter" as default theme
+            // - replace tabs with 2 spaces
+            EnlighterJS.init("pre", "code", {
+                language: "python",
+                theme: "bootstrap4",
+                indent: 2
+            });
+    </script>
+}

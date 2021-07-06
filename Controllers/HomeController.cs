@@ -27,7 +27,9 @@ namespace Project.Controllers
             List<Challenge> challenges = await _ctx.Challenges
                 .Include(x => x.Author)
                 .Include(x => x.Tests)
+                .ThenInclude(x => x.ProgLanguage)
                 .Include(x => x.Likes)
+                .Include(x => x.Level)
                 .ToListAsync();
 
             //viewbag discusses

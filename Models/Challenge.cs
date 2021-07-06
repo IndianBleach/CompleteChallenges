@@ -12,6 +12,7 @@ namespace Project.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public int Score { get; set; }
+        public ChallengeLevel Level { get; set; }
         public ICollection<ChallengeLike> Likes { get; set; }
         public ICollection<Solution> Solutions { get; set; }
         public ICollection<Test> Tests { get; set; }
@@ -27,6 +28,15 @@ namespace Project.Models
             UsersWhoUnlocked = new List<User>();
             Tags = new List<Tag>();            
         }
+    }
+
+    public class ChallengeLevel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public ICollection<Challenge> Challenges { get; set; }
+        public ChallengeLevel() =>
+            Challenges = new List<Challenge>();
     }
 
     public class ChallengeLike 

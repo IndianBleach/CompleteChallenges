@@ -5,7 +5,7 @@
 }
 
 <section>
-    @await Component.InvokeAsync("challengeDetail") 
+    @await Component.InvokeAsync("ChallengeDetail")
 </section>
 <section>
     <div class="col-12 d-flex bg-white p-2">
@@ -42,3 +42,19 @@ item.Tests.First().TestContent
         </div>
     </div>
 </section>
+
+@section scripts {
+    <script type="text/javascript" src="~/dist/enlighterjs.min.js"></script>
+    <script type="text/javascript">
+            // INIT CODE - simple page-wide initialization based on css selectors
+            // - highlight all pre + code tags (CSS3 selectors)
+            // - use javascript as default language
+            // - use theme "enlighter" as default theme
+            // - replace tabs with 2 spaces
+            EnlighterJS.init("pre", "code", {
+                language: "python",
+                theme: "bootstrap4",
+                indent: 2
+            });
+    </script>
+}

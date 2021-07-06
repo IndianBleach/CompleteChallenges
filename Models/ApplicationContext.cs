@@ -20,7 +20,10 @@ namespace Project.Models
         public DbSet<Solution> Solutions { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<ProgramLanguage> ProgramLanguages { get; set; }
-
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<ChallengeLike> ChallengeLikes { get; set; }
+        public DbSet<ChallengeLevel> ChallengeLevels { get; set; }
+        
         //discuss-log
         public DbSet<Discuss> Discusses { get; set; }
         public DbSet<Reply> Replies { get; set; }
