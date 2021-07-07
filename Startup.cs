@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Project.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Project.Services;
+using Project.Interfaces;
 
 namespace Project
 {
@@ -35,7 +37,16 @@ namespace Project
                 {
                     cookie.LoginPath = new Microsoft.AspNetCore.Http.PathString("/authorize/login");
                     cookie.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/authorize/login");
-                });                
+                });
+
+            services.AddSingleton<CsharpBuilder>();
+            services.AddSingleton<PythonBuilder>();
+
+            services.AddTransient<AuthorizeService>();
+            services.AddTransient<DiscussService>();
+            services.AddTransient<ChallengeService>();
+
+            services.AddTransient<UserActivityService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -9,16 +9,19 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Project.Services;
 
 namespace Project.Controllers
 {
     public class AuthorizeController : Controller
     {
         private ApplicationContext _ctx;
+        private AuthorizeService _authService;
 
-        public AuthorizeController(ApplicationContext ctx)
+        public AuthorizeController(ApplicationContext ctx, AuthorizeService authServ)
         {
             _ctx = ctx;
+            _authService = authServ;
         }
 
         #region :POST ENDPOINTS
@@ -34,10 +37,7 @@ namespace Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                User existUser = await _ctx.Users
-                    .Include(x => x.Role)
-                    .FirstOrDefaultAsync(x =>
-                    x.Username == logUser.Username && x.Password == x.Password);
+                User existUser = _authService.GetUserByData(logUser);
 
                 if (existUser != null)
                 {
@@ -56,33 +56,13 @@ namespace Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                User isUserAlreadyExist = await _ctx.Users.FirstOrDefaultAsync(x => x.Username == regUser.Username);
+                User isUserAlreadyExist = _authService.GetUserByUsername(regUser.Username);
 
                 if (isUserAlreadyExist == null)
                 {
+                    User newUser = _authService.RegisterUser(regUser);
 
-                    User buildUser = new Models.User
-                    {
-                        Username = regUser.Username,
-                        Email = regUser.Email,
-                        Password = regUser.Password,
-                        DateCreated = DateTime.Now,
-                        Events = new List<UserEvent>(),
-                        MyChallenges = new List<Challenge>(),
-                        MyDiscusses = new List<Discuss>(),
-                        MySolutions = new List<Solution>(),
-                        Replies = new List<Reply>(),
-                        Score = 0,
-                        ChallengeLikes = new List<ChallengeLike>(),                        
-                        UnlockedChallenges = new List<Challenge>(),
-                        Role = await _ctx.UserRoles.FirstOrDefaultAsync(x =>
-                            x.Name == "user")
-                    };
-
-                    _ctx.Users.Add(buildUser);
-                    await _ctx.SaveChangesAsync();
-
-                    await GoAuthenticate(buildUser);
+                    await GoAuthenticate(newUser);
 
                     return RedirectToAction("index", "home");
                 }

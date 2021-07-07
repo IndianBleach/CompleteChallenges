@@ -6,94 +6,54 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project.Models;
+using Project.Services;
 
 namespace Project.Controllers
 {
     public class DiscussController : Controller
     {
-        private ApplicationContext _ctx;
+        private DiscussService _discussService;
 
-        public DiscussController(ApplicationContext ctx)
+        public DiscussController(ApplicationContext ctx, DiscussService discussService)
         {
-            _ctx = ctx;
+            _discussService = discussService;
         }
 
         [Authorize]
         public async Task<IActionResult> CreateDiscuss(string discussContent, string discussName)
         {
-            if (discussContent != null && discussName != null)
-            {
-                _ctx.Discusses.Add(new Discuss
-                {
-                    Author = _ctx.Users.FirstOrDefault(x =>
-                        x.Username == User.Identity.Name),
-                    Content = discussContent,
-                    DateCreated = DateTime.Now,
-                    Name = discussName,
-                    Replies = new List<Reply>()
-                });
-                await _ctx.SaveChangesAsync();
-            }
+            if (discussContent != null && discussName != null)        
+                await _discussService.AddDiscuss(User.Identity.Name, discussContent, discussName);            
 
-            List<Discuss> discusses = await _ctx.Discusses
-                .Include(x => x.Author)
-                .Include(x => x.Replies)
-                .ToListAsync();
+            List<Discuss> discusses = _discussService.GetAllDiscusses();
 
             return View("index", discusses);
         }
 
         [Authorize]
-        public async Task<IActionResult> CreateReply(int? discussId, string replyContent)
+        public IActionResult CreateReply(int? discussId, string replyContent)
         {
-            if (discussId != null)
-            {
-                Discuss dis = await _ctx.Discusses
-                    .Include(x => x.Replies)
-                    .FirstOrDefaultAsync(x =>
-                        x.Id == discussId);
+            Discuss updatedDiscuss = _discussService.AddReplyAndGetDiscuss(User.Identity.Name, replyContent, discussId);
 
-                if (replyContent != null)
-                {
-                    _ctx.Replies.Add(new Reply
-                    {
-                        Author = _ctx.Users.FirstOrDefault(x =>
-                            x.Username == User.Identity.Name),
-                        Content = replyContent,
-                        DateCreated = DateTime.Now,
-                        Discuss = dis
-                    });
-                    await _ctx.SaveChangesAsync();
-                }
+            if (updatedDiscuss != null)
+                return View("replies", updatedDiscuss);
 
-                return View("replies", dis);
-            }
             return RedirectToAction("index");
         }
 
-        public async Task<IActionResult> Replies(int? discuss)
+        public IActionResult Replies(int? discuss)
         {
-            if (discuss != null)
-            {
-                Discuss findDis = await _ctx.Discusses
-                    .Include(x => x.Author)
-                    .Include(x => x.Replies)
-                    .FirstOrDefaultAsync(x =>
-                    x.Id == discuss);
+            Discuss loadDiscuss = _discussService.GetDiscussWithReplies(discuss);
 
-                if (findDis != null) return View(findDis);
-            }
+            if (loadDiscuss != null)
+                return View("replies", loadDiscuss);
+
             return RedirectToAction("index");
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            List<Discuss> discusses = await _ctx.Discusses
-                .Include(x => x.Author)
-                .Include(x => x.Replies)
-                .ToListAsync();
-
-            //ViewBag.Discusses = discusses;
+            List<Discuss> discusses = _discussService.GetAllDiscusses();
 
             return View(discusses);
         }

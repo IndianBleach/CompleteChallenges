@@ -5,18 +5,37 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Project.Interfaces;
 using Project.Models;
 using Project.Models.ValidModels;
+using Project.Services;
 
 namespace Project.Controllers
 {
     public class ChallengeController : Controller
     {
         private ApplicationContext _ctx;
+        private ChallengeService _challengeService;
+        private UserActivityService _activityService;
 
-        public ChallengeController(ApplicationContext ctx)
+        public ChallengeController(ApplicationContext ctx, ChallengeService challengeService, UserActivityService activityServ)
         {
             _ctx = ctx;
+            _challengeService = challengeService;
+            _activityService = activityServ;
+        }
+
+        #region POST ENDPOINTS
+        [Authorize]
+        [HttpPost]
+        public IActionResult Solve(string solutionLanguage, string solutionContent)
+        {
+            if ((solutionContent != null) && (solutionLanguage != null))
+            { 
+                
+            }
+            
+            return RedirectToAction();
         }
 
         [Authorize]
@@ -25,90 +44,22 @@ namespace Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                //build-log
-                CsharpBuilder includeCsharpTest = challengeModel.CsharpTest != null ? new CsharpBuilder() : null;
-                PythonBuilder includePythonTest = challengeModel.PythonTest != null ? new PythonBuilder() : null;
+                await _challengeService.CreateChallenge(User.Identity.Name, challengeModel);
 
-                //build challenge tag list
-                List<Tag> tagList = new List<Tag>();
-                foreach (var tagName in challengeModel.Tags)
-                {
-                    tagList.Add(_ctx.Tags.FirstOrDefault(x =>
-                        x.Name == tagName));
-                }
-
-                // +challenge
-                Challenge newChallenge = new Challenge
-                {
-                    Author = await _ctx.Users.FirstOrDefaultAsync(x =>
-                        x.Username == User.Identity.Name),
-                    Description = challengeModel.Description,
-                    Name = challengeModel.Name,
-                    Score = 0,
-                    DateCreated = DateTime.Now,
-                    Level = _ctx.ChallengeLevels.FirstOrDefault(x =>
-                        x.Name == challengeModel.Level),
-                    Likes = new List<ChallengeLike>(),
-                    Solutions = new List<Solution>(),
-                    Tags = tagList,
-                    UsersWhoUnlocked = new List<User>(),
-                    Tests = new List<Test>()
-                };
-
-                // +set tests to challenge                                               
-                List<Test> challengeTests = new List<Test>();
-                if (includeCsharpTest != null)
-                {
-                    challengeTests.Add(
-                        includeCsharpTest.BuildTest(
-                        newChallenge,
-                        await _ctx.ProgramLanguages.FirstOrDefaultAsync(x =>
-                            x.Name == "C#"),
-                        challengeModel.CsharpTest
-                        )
-                    );
-                }
-
-                if (includePythonTest != null)
-                {
-                    challengeTests.Add(
-                        includePythonTest.BuildTest(
-                        newChallenge,
-                        await _ctx.ProgramLanguages.FirstOrDefaultAsync(x =>
-                            x.Name == "Python"),
-                        challengeModel.PythonTest
-                        )
-                    );
-                }
-                //render response
-                await _ctx.Tests.AddRangeAsync(challengeTests);
-
-                await _ctx.SaveChangesAsync();
+                await _activityService.AddUserActivityEvent(User.Identity.Name, $"публ. {challengeModel.Name}");
             }
             return RedirectToAction("index");
         }
+        #endregion
 
-
-        public async Task<IActionResult> Solve(int? challenge)
+        #region GET ENDPOINTS
+        [HttpGet]
+        public IActionResult Solve(int? challenge)
         {
-            if (challenge != null)
-            {
-                Challenge findChallenge = await _ctx.Challenges
-                    .Include(x => x.Author)
-                    .Include(x => x.Solutions)
-                    .Include(x => x.Tags)
-                    .Include(x => x.Level)
-                    .Include(x => x.Tests)
-                    .ThenInclude(x => x.ProgLanguage)
-                    .Include(x => x.Likes)
-                    .Include(x => x.UsersWhoUnlocked)
-                    .FirstOrDefaultAsync(x => x.Id == challenge);
+            Challenge findChallenge = _challengeService.GetChallengeById(challenge);
 
-                if (findChallenge != null)
-                {
-                    return View("solve", findChallenge);
-                }
-            }
+            if (findChallenge != null)
+                return View("solve", findChallenge);
 
             return RedirectToAction("index");
         }
@@ -124,20 +75,10 @@ namespace Project.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            List<Challenge> challenges = await _ctx.Challenges
-                .Include(x => x.Author)
-                    .Include(x => x.Solutions)
-                    .Include(x => x.Tags)
-                    .Include(x => x.Level)
-                    .Include(x => x.Tests)
-                    .ThenInclude(x => x.ProgLanguage)
-                    .Include(x => x.Likes)
-                    .Include(x => x.UsersWhoUnlocked)
-                    .ToListAsync();
-
-            return View(challenges);
+            return View(_challengeService.GetAllChallenges());
         }
+        #endregion
     }
 }

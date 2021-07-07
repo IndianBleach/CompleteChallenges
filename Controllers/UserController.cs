@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project.Models;
 using Microsoft.EntityFrameworkCore;
+using Project.Services;
 
 namespace Project.Controllers
 {    
     public class UserController : Controller
     {
         private ApplicationContext _ctx;
+        private UserActivityService _activityService;
         
-        public UserController(ApplicationContext ctx)
+        public UserController(ApplicationContext ctx, UserActivityService activityService)
         {
             _ctx = ctx;
+            _activityService = activityService;
         }
 
         [Authorize]
@@ -23,6 +26,8 @@ namespace Project.Controllers
         {
             User findUser = await _ctx.Users.FirstOrDefaultAsync(x =>
             x.Username == User.Identity.Name);
+
+            ViewBag.ActivityEvents = _activityService.GetUserActivityEvents(User.Identity.Name);
 
             ViewBag.SelfUserProfile = true;
 
@@ -35,18 +40,14 @@ namespace Project.Controllers
         {
             User findUser;
             if (user != null)
-            {
-                if (User.Identity.IsAuthenticated)
-                {
-                    int selfUserId = _ctx.Users.FirstOrDefault(x =>
-                    x.Username == User.Identity.Name)
-                    .Id;
-
-                    if (user == selfUserId) return RedirectToAction("MyProfile");
-                }
-                
+            {                        
                 findUser = await _ctx.Users.FirstOrDefaultAsync(x =>
                     x.Id == user);
+
+                if (findUser.Username == User.Identity.Name)
+                    return RedirectToAction("MyProfile");
+
+                ViewBag.ActivityEvents = _activityService.GetUserActivityEvents(findUser.Username);
 
                 if (findUser != null) return View(findUser);
                 else

@@ -13,7 +13,7 @@
                     <div class="text-start">
                         <h4>@Model?.Username</h4>
                         @if (ViewBag.SelfUserProfile == true && User.Identity.IsAuthenticated)
-                        { 
+                        {
                             <p>@Model?.Email</p>
                         }
                     </div>
@@ -37,11 +37,11 @@
                         <p>Нет решений: @Model?.UnlockedChallenges?.Count()</p>
                     </div>
                 </div>
-                <div class="m-1 mt-4 col-11">
+                <div class="m-1 mt-4 col-12">
                     <div id="profileActivityBlock"
-                         class="overflow-hidden d-flex justify-content-end position-relative bg-white pt-2">
+                         class="overflow-hidden d-flex justify-content-end position-relative bg-white pt-2 pb-2">
                         <div class="col justify-content-end position-absolute">
-                            <svg height="20" width="832">
+                            <svg height="20" width="892">
                                 <text x="25" y="15" width="20">Июль</text>
                                 <text x="85" y="15" width="20">Авг</text>
                                 <text x="155" y="15" width="20">Сен</text>
@@ -55,10 +55,47 @@
                                 <text x="715" y="15" width="20">Май</text>
                                 <text x="775" y="15" width="20">Июнь</text>
                             </svg>
-                            <svg class="grider mt-1 ms-4" height="130" width="832">
-                                <text x="780" y="20" width="20">Пон</text>
-                                <text x="780" y="55" width="20">Чтв</text>
-                                <text x="780" y="90" width="20">Воск</text>
+                            <svg class="grider mt-1 ms-4" height="130" width="892">
+                                <text x="840" y="20" width="20">Пон</text>
+                                <text x="840" y="55" width="20">Чтв</text>
+                                <text x="840" y="90" width="20">Воск</text>
+                                @{ 
+                                    DateTime date = DateTime.Now;
+                                    date = date.AddYears(-1).AddDays(2);
+
+                                    for (int i = 0; i < 52; i++)
+                                    {
+                                        for (int q = 0; q < 7; q++)
+                                        {
+                                            int y = q * 11 + q * 5;
+                                            int x = i * 11 + i * 5;
+
+                                            string content = "";
+                                            string color = "#e4e7eb";
+                                            foreach (var item in ViewBag.ActivityEvents)
+                                            {
+                                                if (date.ToShortDateString() == item.DateCreatedStr)
+                                                {
+                                                    content += $" {item.Title} ";
+                                                   
+                                                }
+                                            }
+
+                                            if (content != "") color = "#4fcf3c";
+
+                                            <svg>
+                                                <rect data-content="@content"
+                                                      data-datename="@date.ToLongDateString()"
+                                                      data-date="@date.ToShortDateString()"
+                                                      stroke="pink" stroke-linecap="round" stroke-width="0.5" rx="2" ry="2" height="11" width="11" fill=@color
+                                                      y=@y x=@x>
+                                                </rect>
+                                            </svg>
+
+                                            date = date.AddDays(1);
+                                        }
+                                    }
+                                }
                             </svg>
                         </div>
                     </div>
@@ -78,6 +115,7 @@
                 }
             </div>
             <div></div>
+            
         </div>
     </div>
 </section>
