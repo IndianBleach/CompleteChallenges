@@ -9,6 +9,8 @@ using Project.Interfaces;
 using Project.Models;
 using Project.Models.ValidModels;
 using Project.Services;
+using Project.Models.SolutionEngines;
+using System.Text;
 
 namespace Project.Controllers
 {
@@ -28,14 +30,31 @@ namespace Project.Controllers
         #region POST ENDPOINTS
         [Authorize]
         [HttpPost]
-        public IActionResult Solve(string solutionLanguage, string solutionContent)
-        {
-            if ((solutionContent != null) && (solutionLanguage != null))
-            { 
-                
+        public IActionResult Solve(string solution, int? testId)
+        {            
+            if (testId != null)
+            {
+                var obj = _ctx.Tests
+                    .Include(x => x.ProgLanguage)
+                    .Include(x => x.Challenge)
+                    .FirstOrDefault(x => x.Id == testId);
+
+                var challenge = _challengeService.GetChallengeById(obj.Challenge.Id);
+
+                var engine = new PythonSolutionEngine();
+
+                if (obj.ProgLanguage.Name == "Python")
+                {                    
+                    var res = engine.BuildResult(User.Identity.Name, obj.TestContent, solution);
+                    ViewBag.Res = res.ResultContent;
+                    ViewBag.OldSolution = solution;
+                    ViewBag.LangName = obj.ProgLanguage.Name;
+
+                    return View("Solve", challenge);
+                }
             }
             
-            return RedirectToAction();
+            return RedirectToAction("index");
         }
 
         [Authorize]
@@ -54,12 +73,16 @@ namespace Project.Controllers
 
         #region GET ENDPOINTS
         [HttpGet]
-        public IActionResult Solve(int? challenge)
+        public IActionResult Solve(int? challenge, string lang)
         {
             Challenge findChallenge = _challengeService.GetChallengeById(challenge);
 
             if (findChallenge != null)
+            {
+                ViewBag.LangName = lang;               
+
                 return View("solve", findChallenge);
+            }
 
             return RedirectToAction("index");
         }

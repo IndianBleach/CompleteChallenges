@@ -7,8 +7,12 @@
 }
 
 .btn {
-    height: 25px !important;
-    padding: 3px;
+    font-family: unset;
+    text-transform: uppercase;
+    padding: 3px 5px;
+    font-size: 14px;
+    height: 29px !important;
+    border-radius: 3px;
 }
 
 .challenge__card p {

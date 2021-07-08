@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
+using Project.Models.SolutionEngines;
 
 namespace Project.Interfaces
 {
     public interface IEngine
     {
-        public string ExecutedContent { get; set; }
+        public SolutionResult BuildSolutionResult(string authorUsername, string test, StringBuilder validatationContent, string solution);
+    }
+
+    public interface ISolutionResult
+    {
+        public string ResultContent { get; set; }
         public bool CanUserSubmitSolution { get; set; }
-        public StringBuilder ExecutedSolutionResult { get; set; }
-        public void BuildSolutionResult(string testContent, string solutionContent);
     }
 }

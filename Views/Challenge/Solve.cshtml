@@ -9,29 +9,60 @@
 </section>
 <section>
     <div class="col-12 d-flex bg-white p-2">
-        <div class="col-6 pe-2 user__code__wrapper">
-            <div>
-                <h5>C# Решение</h5>
-            </div>
-            <div class="">
-                <textarea class="form-control"
+        <form asp-action="solve" asp-controller="challenge" method="post" class="col-6">
+            <div class="col-12 pe-2 user__code__wrapper">
+                <div>
+                    <h5>C# Решение</h5>
+                </div>
+                <div class="">
+                    <input hidden name="testId" value="@Model.Tests.FirstOrDefault(x => x.ProgLanguage.Name == ViewBag.LangName).Id" />
+
+                    @if (ViewBag.OldSolution != null)
+                    {
+                     <textarea tabindex="2"
+                              name="solution"
+                              class="form-control"
+                              id="exampleFormControlTextarea1"
+                              rows="18">
+@ViewBag.OldSolution
+                    </textarea>
+                    }
+                    else
+                    { 
+                <textarea tabindex="2"
+                          name="solution"
+                          class="form-control"
                           id="exampleFormControlTextarea1"
-                          rows="18"></textarea>
+                          rows="18">
+</textarea>
+                    }
+
+                    </div>
+                <div class="col-12 pe-4 ps-4 mt-2 d-flex justify-content-between">
+                    <button class="btn btn-outline-primary">Вернуться</button>
+                    <button id="submitSolutionBtn" type="submit" class="ms-4 btn btn-outline-primary">
+                        Тестировать
+                    </button>
+                </div>
             </div>
-            <div class="col-12 pe-4 ps-4 mt-2 d-flex justify-content-between">
-                <button class="btn btn-outline-primary">Вернуться</button>
-                <button class="ms-4 btn btn-outline-primary">
-                    Тестировать
-                </button>
-            </div>
-        </div>
+        </form>
         <div class="col-6">
             <h5>Результат</h5>
             <div class="border p-2 user__code__wrapper bg-light">
+                @if (ViewBag.res != null)
+                {
                 <pre data-enlighter-language="less"
                      class="pb-0 mb-0 position-absolute">
-item.Tests.First().TestContent
+@ViewBag.res
 </pre>
+                }
+                else 
+                {
+            <pre data-enlighter-language="less"
+                 class="pb-0 mb-0 position-absolute">
+//write solution
+</pre>
+                }
             </div>
             <div class="col-12 mt-2 d-flex pe-4 ps-4 justify-content-between">
                 <button class="btn btn-outline-primary">Открыть решения</button>
@@ -46,11 +77,7 @@ item.Tests.First().TestContent
 @section scripts {
     <script type="text/javascript" src="~/dist/enlighterjs.min.js"></script>
     <script type="text/javascript">
-            // INIT CODE - simple page-wide initialization based on css selectors
-            // - highlight all pre + code tags (CSS3 selectors)
-            // - use javascript as default language
-            // - use theme "enlighter" as default theme
-            // - replace tabs with 2 spaces
+
             EnlighterJS.init("pre", "code", {
                 language: "python",
                 theme: "bootstrap4",

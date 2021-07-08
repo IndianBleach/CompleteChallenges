@@ -4,7 +4,10 @@
 }
 
 .btn {
-    font-size: 11px!important;
-    text-transform: uppercase!important;
-    height: 25px!important;
+    font-family: unset;
+    text-transform: uppercase;
+    padding: 3px 5px;
+    font-size: 16px;
+    height: 29px !important;
+    border-radius: 3px;
 }

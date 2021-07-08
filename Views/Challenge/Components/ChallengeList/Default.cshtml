@@ -22,7 +22,7 @@
                 <div class="d-flex">
                     @foreach (var lang in item.Tests)
                     {
-                        <a class="btn me-4 btn-outline-primary" asp-action="solve" asp-route-challenge="@item.Id" asp-controller="challenge">Выполнить @lang.ProgLanguage.Name</a>
+                        <a class="btn me-4 btn-outline-primary" asp-route-lang="@lang.ProgLanguage.Name" asp-action="solve" asp-route-challenge="@item.Id" asp-controller="challenge">Выполнить @lang.ProgLanguage.Name</a>
                     }
                 </div>
             </div>
