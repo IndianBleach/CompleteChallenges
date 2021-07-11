@@ -34,6 +34,7 @@ namespace Project.Controllers
         {            
             if (testId != null)
             {
+                //need fix
                 var obj = _ctx.Tests
                     .Include(x => x.ProgLanguage)
                     .Include(x => x.Challenge)
@@ -41,10 +42,24 @@ namespace Project.Controllers
 
                 var challenge = _challengeService.GetChallengeById(obj.Challenge.Id);
 
-                var engine = new PythonSolutionEngine();
+                //need fix
+                SolutionResult solResolt = (obj.ProgLanguage.Name) switch
+                {
+                    "Python" => solResolt = new PythonSolutionEngine().BuildResult(User.Identity.Name, obj.TestContent, solution),
+                    "Csharp" => solResolt = new CsharpSolutionEngine().BuildResult(User.Identity.Name, obj.TestContent, solution),
+                    _ => new SolutionResult { CanUserSubmitSolution = false, ResultContent = "solution engine error"}
+                };
 
+                ViewBag.Res = solResolt.ResultContent;
+                ViewBag.OldSolution = solution;
+                ViewBag.LangName = obj.ProgLanguage.Name;
+
+                return View("Solve", challenge);
+
+                /*
                 if (obj.ProgLanguage.Name == "Python")
-                {                    
+                {
+                    var engine = new PythonSolutionEngine();
                     var res = engine.BuildResult(User.Identity.Name, obj.TestContent, solution);
                     ViewBag.Res = res.ResultContent;
                     ViewBag.OldSolution = solution;
@@ -52,8 +67,18 @@ namespace Project.Controllers
 
                     return View("Solve", challenge);
                 }
-            }
-            
+                else if (obj.ProgLanguage.Name == "Csharp")
+                {
+                    var engine = new CsharpSolutionEngine();
+                    var res = engine.BuildResult(User.Identity.Name, obj.TestContent, solution);
+                    ViewBag.Res = res.ResultContent;
+                    ViewBag.OldSolution = solution;
+                    ViewBag.LangName = obj.ProgLanguage.Name;
+
+                    return View("Solve", challenge);
+                }
+                */
+            }            
             return RedirectToAction("index");
         }
 

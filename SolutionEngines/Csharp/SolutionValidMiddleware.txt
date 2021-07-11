@@ -1,0 +1,17 @@
+bool canUserSubmitSolution = true;
+
+List<string> result = new List<string>();
+
+foreach (var test in tests)
+{
+    if (test[0] == test[1])
+    {
+        result.Add("answer: " + test[1].ToString() + "; your result: " + test[0].ToString() + " # true \n");
+    }
+    else
+    {
+        result.Add("answer: " + test[1].ToString() + "; your result: " + test[0].ToString() + " # false \n");
+        canUserSubmitSolution = false;
+    }
+}
+return result;
