@@ -13,14 +13,16 @@ namespace Project.Controllers
     public class DiscussController : Controller
     {
         private DiscussService _discussService;
+        private ApplicationContext _ctx;
 
         public DiscussController(ApplicationContext ctx, DiscussService discussService)
         {
+            _ctx = ctx;
             _discussService = discussService;
         }
 
         [Authorize]
-        public async Task<IActionResult> CreateDiscuss(string discussContent, string discussName)
+        public async Task<IActionResult> Create(string discussContent, string discussName)
         {
             if (discussContent != null && discussName != null)        
                 await _discussService.AddDiscuss(User.Identity.Name, discussContent, discussName);            
@@ -31,7 +33,7 @@ namespace Project.Controllers
         }
 
         [Authorize]
-        public IActionResult CreateReply(int? discussId, string replyContent)
+        public IActionResult Create(int? discussId, string replyContent)
         {
             Discuss updatedDiscuss = _discussService.AddReplyAndGetDiscuss(User.Identity.Name, replyContent, discussId);
 
@@ -54,6 +56,7 @@ namespace Project.Controllers
         public IActionResult Index()
         {
             List<Discuss> discusses = _discussService.GetAllDiscusses();
+            ViewBag.Tags = _ctx.Tags.ToList();
 
             return View(discusses);
         }

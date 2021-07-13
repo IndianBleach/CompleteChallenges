@@ -5,38 +5,73 @@
 }
 
 <section>
-    <div class="container-fluid mt-4">
-        <div class="col-12 text-center mb-4">
-            <h4>Обсуждения сообщества</h4>
+    <div class="bg-white p-2">
+        <div class="col-12 rounded border pt-4 ps-2 bg-white pb-3">
+            <div class="text-center">
+                <h4 class="tbig">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chat-right-quote-fill" viewBox="0 0 16 16">
+                        <path d="M16 2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9.586a1 1 0 0 1 .707.293l2.853 2.853a.5.5 0 0 0 .854-.353V2zM7.194 4.766c.087.124.163.26.227.401.428.948.393 2.377-.942 3.706a.446.446 0 0 1-.612.01.405.405 0 0 1-.011-.59c.419-.416.672-.831.809-1.22-.269.165-.588.26-.93.26C4.775 7.333 4 6.587 4 5.667 4 4.747 4.776 4 5.734 4c.271 0 .528.06.756.166l.008.004c.169.07.327.182.469.324.085.083.161.174.227.272zM11 7.073c-.269.165-.588.26-.93.26-.958 0-1.735-.746-1.735-1.666 0-.92.777-1.667 1.734-1.667.271 0 .528.06.756.166l.008.004c.17.07.327.182.469.324.085.083.161.174.227.272.087.124.164.26.228.401.428.948.392 2.377-.942 3.706a.446.446 0 0 1-.613.01.405.405 0 0 1-.011-.59c.42-.416.672-.831.81-1.22z" />
+                    </svg>
+                    Опубликовать своё обсуждение
+                </h4>
+                <p class="mb-1 tbg-desc tsmall">
+                    Поделитесь с сообществом своим вопросом и получите ответы
+                </p>
+            </div>
+            <form asp-action="create" asp-controller="discuss" method="post" id="discussSubmitForm" class="container">
+                <div class="col-12 d-flex justify-content-center">
+                    <div class="col-12 d-flex p-2">
+                        <div class="col-8 pt-4">
+                            <input name="name" class="form-control form-control-sm mb-2" placeholder="Завараживающее название для вашего обсуждения">
+                            <textarea name="content" class="form-control form-control-sm" placeholder="Описание вашего вопроса"></textarea>
+                        </div>
+                        <div class="col">
+                            <label class="ps-3 pt-0 mb-0 tsmall text-secondary">Выберите несколько тегов по вашей теме</label>
+                            <select name="tags" id="selectDiscussTag" multiple class="ms-2 ps-2 form-select form-select-sm" aria-label=".form-select-sm example">
+                                @if (ViewBag.Tags != null)
+                                {
+                                    @foreach (var item in ViewBag.Tags)
+                                    {
+                                        <option value="24">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-submit ms-2">Опубликовать</button>
+                </div>
+            </form>
         </div>
-        <section>
-            <div>
-                <form asp-action="creatediscuss" asp-controller="discuss">
-                    <div class="form-group col-10 col-sm-6">
-                        <input name="discussName"
-                               type="text"
-                               class="form-control form-control-sm"
-                               id="title"
-                               placeholder="Название" />
+        <div class="col-12 mt-4 p-2 pb-0 border rounded">
+            <div class="col-12 mt-4 text-center">
+                <h4 class="tbig">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                        <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z" />
+                        <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
+                    </svg>
+                    Обсуждения сообщества
+                </h4>
+                <p class="mb-3 tbg-desc tsmall">
+                    Введите новые темы, делитесь мнением, узнавайте новое, спрашивайте неизвестное
+                </p>
+                <form class="col-12" asp-action="search" asp-controller="discuss" method="post">
+                    <div class="mb-2 col-10 d-flex justify-content-between">
+                        <input name="search" placeholder="Найдите тему по названию" class="form-control form-control-sm" />
+                        <button type="submit" class="btn btn-primary ms-2 d-flex">
+                            <span>Поиск</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" class="mt-1 ms-2 bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                            </svg>
+                        </button>
                     </div>
-                    <div class="form-group mt-2">
-                        <textarea name="discussContent"
-                                  class="form-control form-control-sm"
-                                  id="exampleFormControlTextarea1"
-                                  rows="3"
-                                  placeholder="Задайте вопрос, опишите ситуацию, интересуйтесь новым"></textarea>
-                    </div>
-                    <button type="submit" class="mt-2 btn btn-primary">
-                        Submit
-                    </button>
                 </form>
-
             </div>
-        </section>
-        <section>
-            <div class="mb-2 mt-4">
+            <section>
                 @await Component.InvokeAsync("DiscussList")
-            </div>
-        </section>
+            </section>
+        </div>
     </div>
 </section>
