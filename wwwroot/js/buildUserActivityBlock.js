@@ -10,7 +10,7 @@ $("rect").hover(
         }
         $("#activityResultPopup").html(
             `<p style="top: ${y - 35}px; left: ${
-            x - 56
+            x - 136
             }px;" class="text-white bg-dark p-1 rounded border-3 position-absolute z100"><span class="text-secondary">${thisDate}</span>${
             cnt
             }</p>`

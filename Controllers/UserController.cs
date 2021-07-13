@@ -9,7 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Project.Services;
 
 namespace Project.Controllers
-{    
+{
+    //[Route("user")]
     public class UserController : Controller
     {
         private ApplicationContext _ctx;
@@ -21,40 +22,43 @@ namespace Project.Controllers
             _activityService = activityService;
         }
 
+
         [Authorize]
-        public async Task<IActionResult> MyProfile()
+        public async Task<IActionResult> Me()
         {
-            User findUser = await _ctx.Users.FirstOrDefaultAsync(x =>
-            x.Username == User.Identity.Name);
+            User tryFindUser = await _ctx.Users
+                .Include(x => x.Events)
+                .FirstOrDefaultAsync(x =>
+                x.Username == User.Identity.Name);
 
-            ViewBag.ActivityEvents = _activityService.GetUserActivityEvents(User.Identity.Name);
-
-            ViewBag.SelfUserProfile = true;
-
-            if (findUser != null) return View("profile", findUser);
-
-            return RedirectToAction("index", "home");
+            return View("pactivity", tryFindUser);    
         }
 
-        public async Task<IActionResult> Profile(int? user)
+        [Route("{user}/{section?}")]
+        public async Task<IActionResult> Profile(string user, string? section)
         {
-            User findUser;
-            if (user != null)
-            {                        
-                findUser = await _ctx.Users.FirstOrDefaultAsync(x =>
-                    x.Id == user);
+            //NEED FIX
+            User tryFindUser = await _ctx.Users
+                .Include(x => x.Events)
+                .Include(x => x.MyDiscusses)
+                .Include(x => x.MySolutions)
+                .Include(x => x.MyChallenges)
+                .ThenInclude(x => x.Level)
+                .FirstOrDefaultAsync(x =>
+                x.Username == user);
 
-                if (findUser.Username == User.Identity.Name)
-                    return RedirectToAction("MyProfile");
+            if (tryFindUser != null)
+            {
+                if (tryFindUser.Username == User.Identity.Name)
+                    ViewBag.SelfUserProfile = true;
 
-                ViewBag.ActivityEvents = _activityService.GetUserActivityEvents(findUser.Username);
-
-                if (findUser != null) return View(findUser);
-                else
+                return (section) switch
                 {
-                    //return self user profile if findUser or user == null
-                    return RedirectToAction("MyProfile");
-                }
+                    "solutions" => View("psolutions", tryFindUser),
+                    "creations" => View("pcreations", tryFindUser),
+                    "discusses" => View("pdiscusses", tryFindUser),
+                    _ => View("pactivity", tryFindUser)
+                };
             }
             return RedirectToAction("index", "home");
         }

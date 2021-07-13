@@ -55,29 +55,6 @@ namespace Project.Controllers
                 ViewBag.LangName = obj.ProgLanguage.Name;
 
                 return View("Solve", challenge);
-
-                /*
-                if (obj.ProgLanguage.Name == "Python")
-                {
-                    var engine = new PythonSolutionEngine();
-                    var res = engine.BuildResult(User.Identity.Name, obj.TestContent, solution);
-                    ViewBag.Res = res.ResultContent;
-                    ViewBag.OldSolution = solution;
-                    ViewBag.LangName = obj.ProgLanguage.Name;
-
-                    return View("Solve", challenge);
-                }
-                else if (obj.ProgLanguage.Name == "Csharp")
-                {
-                    var engine = new CsharpSolutionEngine();
-                    var res = engine.BuildResult(User.Identity.Name, obj.TestContent, solution);
-                    ViewBag.Res = res.ResultContent;
-                    ViewBag.OldSolution = solution;
-                    ViewBag.LangName = obj.ProgLanguage.Name;
-
-                    return View("Solve", challenge);
-                }
-                */
             }            
             return RedirectToAction("index");
         }

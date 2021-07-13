@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@model Project.Models.User
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -25,7 +28,7 @@
 
     <link rel="stylesheet" href="~/dist/enlighterjs.min.css" />
     <link rel="stylesheet" href="~/css/main.css" />
-    <title>Codebreed</title>
+    <title>Profile</title>
 
 </head>
 <body class="bg-light">
@@ -88,11 +91,60 @@
                 </ul>
             </div>
             <div class="col">
-                @RenderBody()
+                <section>
+                    <div class="container bg-white rounded border p-4 d-flex">
+                        <div class="ms-md-4">
+                            <div id="profileAvatar" class="bg-light">
+                            </div>
+                            <div class="text-center pt-4">
+                                <p class="tspecial">Score: 12439</p>
+                                <div class="text-start">
+                                    <p class="tsmall tbg-desc p-2 border rounded">
+                                        About о юзере информация о юзере
+                                        About о юзере информация о юзереAbout о юзере информация о юзере
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="text-center pt-0 col-12 d-flex">
+                                @if (ViewBag.SelfUserProfile == true && User.Identity.IsAuthenticated)
+                                {
+                                    <button class="btn-primary btn col-12">Редактировать</button>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-10 pt-4">
+                            <div class="col-12 justify-content-around d-flex">
+                                <div>
+                                    <p class="tmedium">Решений: @Model.MySolutions.Count()</p>
+                                    <p class="tmedium">Создано: @Model.MyChallenges.Count()</p>
+                                </div>
+                                <div>
+                                    <p class="tmedium">Обсуждений: @Model.MyDiscusses.Count()</p>
+                                    <p class="tmedium">Ответов: @Model.Replies.Count()</p>
+                                </div>
+                            </div>
+                            <div class="col-12 justify-content-center pt-4 d-flex">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="...">
+                                    <a class="btn pe-3 ps-3 btn-action" asp-action="activity" asp-controller="@Model.Username">Активность</a>
+                                    <a class="btn pe-3 ps-3 btn-action" asp-action="solutions" asp-controller="@Model.Username">Решения</a>
+                                    <a class="btn pe-3 ps-3 btn-action" asp-action="creations" asp-controller="@Model.Username">Созданные задания</a>
+                                    <a class="btn pe-3 ps-3 btn-action" asp-action="discusses" asp-controller="@Model.Username">Обсуждения</a>
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex justify-content-center">
+                                @RenderBody()
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     </main>
     @RenderSection("scripts", required: false)
 </body>
 </html>
+
+@section scripts {
+    <script type="text/javascript" src="~/js/buildUserActivityBlock.js"></script>
+}
 

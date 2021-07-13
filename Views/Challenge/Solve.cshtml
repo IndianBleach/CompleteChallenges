@@ -12,7 +12,12 @@
         <form asp-action="solve" asp-controller="challenge" method="post" class="col-6">
             <div class="col-12 pe-2 user__code__wrapper">
                 <div>
-                    <h5>C# Решение</h5>
+                    <h5>
+                    @if (ViewBag.LangName != null)
+                    { 
+                        <span>@ViewBag.LangName</span>
+                    }
+                    Решение</h5>
                 </div>
                 <div class="">
                     <input hidden name="testId" value="@Model.Tests.FirstOrDefault(x => x.ProgLanguage.Name == ViewBag.LangName).Id" />

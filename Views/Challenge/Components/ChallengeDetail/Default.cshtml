@@ -22,9 +22,20 @@
     <div class="col-6 align-items-start d-flex">
         <div class="me-4 m-2 col-12">
             <div class="p-2 me-4 challenge__code position-relative rounded border-bottom">
-<pre data-enlighter-language="less" class="pb-0 mb-0 position-absolute">
-    @Model.Tests.First().TestContent
+                @if (ViewBag.LangName != null)
+                {
+                    <pre data-enlighter-language="less"
+                         class="pb-0 mb-0 position-absolute">
+@Model.Tests.FirstOrDefault(x => x.ProgLanguage.Name == ViewBag.LangName)
 </pre>
+                }
+                else
+                {
+                    <pre data-enlighter-language="less"
+                         class="pb-0 mb-0 position-absolute">
+//report this challenge, without tests
+</pre>
+                }
             </div>
             <div class="p-2 col-12 d-flex justify-content-between">
                 <div>
