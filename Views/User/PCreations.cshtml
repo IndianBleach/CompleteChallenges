@@ -27,7 +27,7 @@
                         }
                     </div>
                 </div>
-                <p class="tsmall pe-2 mb-0">@item.Author</p>
+                <p class="tsmall pe-2 mb-0">@item.Author.Username</p>
             </div>
             <div class="col-12 pe-3 ps-3">
                 <p class="tsmall">
@@ -38,10 +38,26 @@
                 <div class="test_code_wrapper mt-0 border col-12 bg-light rounded">
                     <pre data-enlighter-language="less"
                          class="pb-0 mb-0 position-absolute">
-@item.Tests.First()
+@item.Tests.First().TestContent
                     </pre>
                 </div>
             </div>
         </div>
     }
 </div>
+
+@section scripts {
+    <script type="text/javascript" src="~/dist/enlighterjs.min.js"></script>
+    <script type="text/javascript">
+            // INIT CODE - simple page-wide initialization based on css selectors
+            // - highlight all pre + code tags (CSS3 selectors)
+            // - use javascript as default language
+            // - use theme "enlighter" as default theme
+            // - replace tabs with 2 spaces
+            EnlighterJS.init("pre", "code", {
+                language: "python",
+                theme: "bootstrap4",
+                indent: 2
+            });
+    </script>
+}

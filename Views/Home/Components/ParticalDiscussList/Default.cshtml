@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Project.Models.Discuss>
+
+@foreach (var item in Model)
+{
+    <div class="bg-white border rounded col-12 mb-2 d-flex p-2 justify-content-between align-items-center">
+        <div class="col-10 p-2">
+            <div class="col-12">
+                <h4 class="tbig mb-0">@item.Name</h4>
+            </div>
+            <p class="col-12 mb-2 tbg-desc">
+                @item.Content
+            </p>
+            <p class="tsmall mb-0">
+                <span>
+                    <svg data-toggle="tooltip" data-placement="bottom" title="Ответов" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-chat-right" viewBox="0 0 16 16">
+                        <path d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1H2zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z" />
+                    </svg>
+                    <span class="ps-1">@item.Replies.Count()</span>
+                </span>
+                <span class="tverysmall ms-2">
+                    <svg data-toggle="tooltip" data-placement="bottom" title="Касается следующих тем" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-tag" viewBox="0 0 16 16">
+                        <path d="M6 4.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm-1 0a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0z" />
+                        <path d="M2 1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2a1 1 0 0 1 1-1zm0 5.586 7 7L13.586 9l-7-7H2v4.586z" />
+                    </svg>
+                    <span class="ps-1">Массивы</span>
+                </span>
+            </p>
+        </div>
+        <div class="col text-end me-2">
+            <p class="mb-0 tsmall text-primary">@item.Author.Username</p>
+            <a class="btn btn-action" asp-action="replies" asp-controller="discuss" asp-route-discuss="@item.Id">Обсудить</a>
+        </div>
+    </div>
+}

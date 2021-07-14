@@ -34,7 +34,7 @@
             <div class="d-flex col-12 flex-wrap">
                 @foreach (var test in item.Tests)
                 {
-                    <a asp-action="solve" asp-controller="challenge" asp-route-lang="@test.ProgLanguage.Name" asp-route-challenge="@item.Id" class="me-4 btn btn-action">Выполнить @test.ProgLanguage.Name</a>
+                    <button class="me-4 btn btn-action">Выполнить @test.ProgLanguage.Name</button>
                 }
                 <div class="d-flex align-items-center">
                     <span class="ms-3 tsmall">

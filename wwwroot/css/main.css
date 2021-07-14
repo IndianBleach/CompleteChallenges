@@ -3,6 +3,11 @@
     overflow-x: hidden!important;
 }
 
+a {
+    text-decoration: none!important;
+    color: unset!important;
+}
+
 .min-content {
     width: min-content!important;
 }
@@ -113,4 +118,46 @@ svg text{
 #activityResultPopup p {
     font-size: 12px!important;
     width: max-content!important;
+}
+
+
+#selectDiscussTag {
+    height: 136px;
+}
+
+#discussSubmitForm textarea {
+    height: 74%;
+}
+
+
+
+#solveDescription {
+    height: unset !important;
+}
+
+#solveTestContent {
+    overflow: hidden;
+    height: unset !important;
+}
+
+.user_solved_block {
+    min-height: 500px;
+}
+
+#userSolutionText {
+    width: 100% !important;
+    height: 456px !important;
+}
+
+#solutionResultBlock {
+    width: 100% !important;
+    height: 456px !important;
+}
+
+.enlighter-t-bootstrap4 {
+    padding: 10px !important;
+}
+
+.enlighter-t-bootstrap4 {
+    height: inherit !important;
 }
