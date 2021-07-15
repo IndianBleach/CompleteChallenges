@@ -26,41 +26,51 @@
     <div class="bg-light p-2 mt-2 col-12 border bg-lighjt rounded p-2">
         <div class="pt-2 col-12 ">
             @await Component.InvokeAsync("ChallengeDetail") 
-            <div class="mt-4 col-12 d-flex">
-                <div class="col-6 border rounded bg-white user_solved_block p-1">
-                    <div class="bg-light">
-                        <p class="mb-0 p-1 tsmall text-secondary">Ваше решение</p>
-                    </div>
-                    <textarea class="mt-1 form-control form-control-sm" id="userSolutionText" placeholder="//solution"></textarea>
-                    <div class="bg-light mt-1 border col-12 d-flex justify-content-between p-1">
-                        <a asp-action="index" asp-controller="challenge" class="btn btn-action">Вернуться</a>
-                        <a class="btn btn-action">Открыть решения</a>
-                    </div>
-                </div>
-                <div class="col-6 border rounded bg-white user_solved_block p-1">
-                    <div class="bg-light">
-                        <p class="mb-0 p-1 tsmall text-secondary">Результат</p>
-                    </div>
-                    <div id="solutionResultBlock" class="mt-1 position-relative rounded border">
-                        @if (ViewBag.LangName != null)
+            <form class="col-12 m-0 p-0" asp-action="solve" method="post" asp-controller="challenge">
+                <div class="mt-4 col-12 d-flex">
+                    <div class="col-6 border rounded bg-white user_solved_block p-1">
+                        <div class="bg-light">
+                            <p class="mb-0 p-1 tsmall text-secondary">Ваше решение</p>
+                        </div>
+                        <input hidden name="testId" value="@Model.Tests.FirstOrDefault(x => x.ProgLanguage.Name == ViewBag.LangName).Id" />
+                        @if (ViewBag.OldSolution != null)
                         {
-<pre data-enlighter-language="less" class="pb-0 mb-0 position-absolute">
-@Model.Tests.FirstOrDefault(x => x.ProgLanguage.Name == ViewBag.LangName).TestContent
-</pre>
+                    <textarea name="solution" class="mt-1 form-control form-control-sm" id="userSolutionText">@ViewBag.OldSolution</textarea>
                         }
                         else
                         {
-<pre data-enlighter-language="less" class="pb-0 mb-0 position-absolute">
-@Model.Tests.First().TestContent
-</pre>
+                            <textarea name="solution" class="mt-1 form-control form-control-sm" id="userSolutionText" placeholder="//solution"></textarea>
                         }
+                        <div class="bg-light mt-1 border col-12 d-flex justify-content-between p-1">
+                            <a asp-action="index" asp-controller="challenge" class="btn btn-action">Вернуться</a>
+                            <a class="btn btn-action">Открыть решения</a>
+                        </div>
                     </div>
-                    <div class="bg-light mt-1 border col-12 d-flex justify-content-between p-1">
-                        <button class="btn btn-primary">Тестировать</button>
-                        <button class="btn btn-submit">Отправить</button>
+                    <div class="col-6 border rounded bg-white user_solved_block p-1">
+                        <div class="bg-light">
+                            <p class="mb-0 p-1 tsmall text-secondary">Результат</p>
+                        </div>
+                        <div id="solutionResultBlock" class="mt-1 position-relative rounded border">
+                            @if (ViewBag.Res != null)
+                            {
+                            <pre data-enlighter-language="less" class="pb-0 mb-0 position-absolute">
+@ViewBag.Res
+</pre>
+                            }
+                            else
+                            { 
+                        <pre data-enlighter-language="less" class="pb-0 mb-0 position-absolute">
+//solution result
+</pre>
+                            }
+                        </div>
+                        <div class="bg-light mt-1 border col-12 d-flex justify-content-between p-1">
+                            <button type="submit" class="btn btn-primary">Тестировать</button>
+                            <a class="btn btn-submit">Отправить</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>

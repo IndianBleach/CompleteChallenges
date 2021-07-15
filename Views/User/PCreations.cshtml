@@ -1,4 +1,4 @@
-﻿@model Project.Models.User;
+﻿@model Project.Models.User
 
 @{
     ViewData["Title"] = "Творения";
@@ -6,6 +6,14 @@
 }
 
 <div class="col-10 p-3 mt-5 border rounded">
+    
+    @if (Model.MyChallenges.Count <= 0)
+    { 
+    <div class="col-12 text-center">
+        <h4 class="tbig">Здесь пусто</h4>
+        <p class="tsmall text-secondary">@Model.Username пока не имеет собственных заданий</p>
+    </div>
+    }
     @foreach (var item in Model.MyChallenges)
     {
         <div class="col-12 mb-4 border bg-white rounded">

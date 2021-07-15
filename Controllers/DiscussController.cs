@@ -22,10 +22,10 @@ namespace Project.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Create(string discussContent, string discussName)
+        public async Task<IActionResult> Create(string discussContent, string discussName, ICollection<string> tags)
         {
-            if (discussContent != null && discussName != null)        
-                await _discussService.AddDiscuss(User.Identity.Name, discussContent, discussName);            
+            if (discussContent != null && discussName != null)
+                await _discussService.AddDiscuss(User.Identity.Name, discussContent, discussName, tags);
 
             List<Discuss> discusses = _discussService.GetAllDiscusses();
 
@@ -33,7 +33,7 @@ namespace Project.Controllers
         }
 
         [Authorize]
-        public IActionResult Create(int? discussId, string replyContent)
+        public IActionResult AddReply(int? discussId, string replyContent)
         {
             Discuss updatedDiscuss = _discussService.AddReplyAndGetDiscuss(User.Identity.Name, replyContent, discussId);
 

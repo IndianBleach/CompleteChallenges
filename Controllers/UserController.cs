@@ -31,6 +31,8 @@ namespace Project.Controllers
                 .FirstOrDefaultAsync(x =>
                 x.Username == User.Identity.Name);
 
+            ViewBag.SelfUserProfile = true;
+
             return View("pactivity", tryFindUser);    
         }
 
@@ -43,7 +45,12 @@ namespace Project.Controllers
                 .Include(x => x.MyDiscusses)
                 .Include(x => x.MySolutions)
                 .Include(x => x.MyChallenges)
+                .ThenInclude(x => x.Tests)
+                .Include(x => x.MyChallenges)
                 .ThenInclude(x => x.Level)
+                .Include(x => x.MyChallenges)
+                .ThenInclude(x => x.Tests)
+                .ThenInclude(x => x.ProgLanguage)
                 .FirstOrDefaultAsync(x =>
                 x.Username == user);
 

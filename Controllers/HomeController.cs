@@ -29,6 +29,7 @@ namespace Project.Controllers
                 .Include(x => x.Tests)
                 .ThenInclude(x => x.ProgLanguage)
                 .Include(x => x.Likes)
+                .Include(x => x.Tags)
                 .Include(x => x.Solutions)
                 .Include(x => x.Level)
                 .ToListAsync();
