@@ -10,41 +10,66 @@
             <p class="tsmall pt-1">
                 Решайте, создавайте, прокачивайтесь, изучайте новое
             </p>
-            <form class="col-12 text-start">
+            <form asp-action="addreport" asp-controller="challenge" method="post" class="col-12 text-start">
                 <p class="tsmall mb-0"><em>Если вы думайте, что задание содержит некорректный тест, напишите об этом автору</em></p>
                 <div class="d-flex col-12 align-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="me-2 bi bi-emoji-frown" viewBox="0 0 16 16">
                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                         <path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.498 3.498 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.498 4.498 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z" />
                     </svg>
-                    <input class="form-control form-control-sm" placeholder="Опишите в чем заключается проблема этого задания" />
-                    <button class="ms-1 btn btn-danger">Отправить</button>
+                    <input name="lang" value="@ViewBag.LangName" hidden/>
+                    <input name="challenge" value="@Model.Id" hidden/>
+                    <input name="reportContent" class="form-control form-control-sm" placeholder="Опишите в чем заключается проблема этого задания" />
+                    <button type="submit" class="ms-1 btn btn-danger">Отправить</button>
                 </div>
             </form>
         </div>
     </div>
     <div class="bg-light p-2 mt-2 col-12 border bg-lighjt rounded p-2">
         <div class="pt-2 col-12 ">
-            @await Component.InvokeAsync("ChallengeDetail") 
-            <form class="col-12 m-0 p-0" asp-action="solve" method="post" asp-controller="challenge">
+            @await Component.InvokeAsync("ChallengeDetail")
+            <div class="col-12 m-0 p-0">
                 <div class="mt-4 col-12 d-flex">
                     <div class="col-6 border rounded bg-white user_solved_block p-1">
-                        <div class="bg-light">
-                            <p class="mb-0 p-1 tsmall text-secondary">Ваше решение</p>
-                        </div>
-                        <input hidden name="testId" value="@Model.Tests.FirstOrDefault(x => x.ProgLanguage.Name == ViewBag.LangName).Id" />
-                        @if (ViewBag.OldSolution != null)
-                        {
-                    <textarea name="solution" class="mt-1 form-control form-control-sm" id="userSolutionText">@ViewBag.OldSolution</textarea>
-                        }
-                        else
-                        {
-                            <textarea name="solution" class="mt-1 form-control form-control-sm" id="userSolutionText" placeholder="//solution"></textarea>
-                        }
-                        <div class="bg-light mt-1 border col-12 d-flex justify-content-between p-1">
-                            <a asp-action="index" asp-controller="challenge" class="btn btn-action">Вернуться</a>
-                            <a class="btn btn-action">Открыть решения</a>
-                        </div>
+                        <form class="col-12" asp-action="solve" asp-controller="challenge" method="post">
+                            <div class="bg-light col-12 d-flex justify-content-between">
+                                <p class="mb-0 p-1 tsmall text-secondary">Ваше решение</p>
+                                @if (ViewBag.SolutionStatus != null)
+                                {
+                                    if (ViewBag.SolutionStatus == true)
+                                    {
+                                        <p class="mb-0 p-1 pe-2 tsmall text-success">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                            </svg>
+                                            Ваше решение готово к публикации
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p class="mb-0 p-1 pe-2 tsmall text-danger">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
+                                            </svg>
+                                            Ваше решение не готово к публикации
+                                        </p>
+                                    }
+                                }
+                            </div>
+                            <input hidden name="testId" value="@Model.Tests.FirstOrDefault(x => x.ProgLanguage.Name == ViewBag.LangName).Id" />
+                            @if (ViewBag.OldSolution != null)
+                            {
+                                <textarea name="solution" class="mt-1 form-control form-control-sm" id="userSolutionText">@ViewBag.OldSolution</textarea>
+                            }
+                            else
+                            {
+                                <textarea name="solution" class="mt-1 form-control form-control-sm" id="userSolutionText" placeholder="//solution"></textarea>
+                            }
+                            <div class="bg-light mt-1 border col-12 d-flex justify-content-between p-1">
+                                <a asp-action="index" asp-controller="challenge" class="btn btn-action">Вернуться</a>
+                                <button type="submit" class="btn btn-primary">Тестировать</button>
+                            </div>
+                        </form>
                     </div>
                     <div class="col-6 border rounded bg-white user_solved_block p-1">
                         <div class="bg-light">
@@ -53,25 +78,126 @@
                         <div id="solutionResultBlock" class="mt-1 position-relative rounded border">
                             @if (ViewBag.Res != null)
                             {
-                            <pre data-enlighter-language="less" class="pb-0 mb-0 position-absolute">
+                                <pre data-enlighter-language="less" class="pb-0 mb-0 position-absolute">
 @ViewBag.Res
 </pre>
                             }
                             else
-                            { 
-                        <pre data-enlighter-language="less" class="pb-0 mb-0 position-absolute">
+                            {
+                                <pre data-enlighter-language="less" class="pb-0 mb-0 position-absolute">
 //solution result
 </pre>
                             }
                         </div>
                         <div class="bg-light mt-1 border col-12 d-flex justify-content-between p-1">
-                            <button type="submit" class="btn btn-primary">Тестировать</button>
-                            <a class="btn btn-submit">Отправить</a>
+                            <form method="post" asp-action="submit" asp-controller="challenge" class="col-12 d-flex justify-content-between">
+                                @if (ViewBag.OldSolution != null)
+                                {
+                                    <textarea name="solution" hidden>@ViewBag.OldSolution</textarea>
+                                    <input hidden name="testId" value="@Model.Tests.FirstOrDefault(x => x.ProgLanguage.Name == ViewBag.LangName).Id" />
+                                }
+                                @if (ViewBag.Unlocked != null)
+                                {
+                                    if (ViewBag.Unlocked != true)
+                                    {
+                                    <a asp-action="unlock" asp-controller="challenge" asp-route-challenge="@Model.Id" asp-route-lang="@ViewBag.LangName" class="btn btn-action">Открыть решения</a>
+                                    }
+                                }
+                                @if (ViewBag.SolutionStatus != null)
+                                {
+                                    if (ViewBag.SolutionStatus == true)
+                                    {
+                                        <button type="submit" class="btn btn-submit">Отправить</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" class="btn btn-submit" disabled>Отправить</button>
+                                    }
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-submit" disabled>Отправить</button>
+                                }
+                            </form>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
+        @if (ViewBag.Unlocked == true)
+        {
+            <div class="col-12 mt-2">
+                <div class="col-12 d-flex justify-content-center">
+                    <a asp-action="solve" asp-controller="challenge" asp-route-challenge="@Model.Id" asp-route-lang="@ViewBag.LangName" asp-route-section="solutions">
+                        <h4 class="tbig me-4"><u>Решения</u></h4>
+                    </a>
+                    <a asp-action="solve" asp-controller="challenge" asp-route-challenge="@Model.Id" asp-route-lang="@ViewBag.LangName" asp-route-section="comments">
+                        <h4 class="tbig me-4"><u>Комментарии</u></h4>
+                    </a>
+                </div>
+                @if (ViewBag.Section == "solutions")
+                {
+                    <div class="col-12 pt-4">
+                        @foreach (var item in Model.Solutions)
+                        {
+                            <div class="col-12 mb-4 border bg-white rounded">
+                                <div class="col-12 pb-0 rounded pt-3 ps-2 d-flex justify-content-between">
+                                    <h4 class="tbig">
+                                        <span class="tspecial ps-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmarks" viewBox="0 0 16 16">
+                                                <path d="M2 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v11.5a.5.5 0 0 1-.777.416L7 13.101l-4.223 2.815A.5.5 0 0 1 2 15.5V4zm2-1a1 1 0 0 0-1 1v10.566l3.723-2.482a.5.5 0 0 1 .554 0L11 14.566V4a1 1 0 0 0-1-1H4z" />
+                                                <path d="M4.268 1H12a1 1 0 0 1 1 1v11.768l.223.148A.5.5 0 0 0 14 13.5V2a2 2 0 0 0-2-2H6a2 2 0 0 0-1.732 1z" />
+                                            </svg>
+                                            @item.Challenge.Level.Name
+                                        </span>
+                                        <span class="tspecial ms-2">@item.ProgLanguage.Name</span>
+                                    </h4>
+                                    <p class="tsmall pe-2">@item.Challenge.Author.Username</p>
+                                </div>
+                                <div>
+                                    <div class="test_code_wrapper mt-0 border col-12 bg-light rounded">
+<pre data-enlighter-language="less"
+     class="pb-0 mb-0 position-absolute">
+@item.SolutionContent
+</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else if (ViewBag.Section == "comments")
+                {
+                    <div class="col-12 p-2 mb-2">
+                        <form class="col-12" asp-action="addcomment" asp-controller="challenge" method="post">
+                            <label>Оставить комментарий</label>
+                            <input hidden name="lang" value="@ViewBag.LangName" />
+                            <input hidden name="challengeId" value="@Model.Id" />
+                            <textarea rows="3" class="form-control form-control-sm" name="commentContent"></textarea>
+                            <button class="mt-2 btn btn-primary" type="submit">Отправить</button>
+                        </form>
+                    </div>
+                    @foreach (var item in Model.Comments)
+                    {
+                        <div class="col-12 mb-3 border bg-white rounded">
+                            <div class="p-2">
+                                <div class="col-12 d-flex justify-content-between">
+                                    <p class="mb-0 tsmall text-primary">@item.Author.Username</p>
+                                    <p class="mb-0 tsmall text-secondary">@item.CreatedDateStr</p>
+                                </div>
+                                <p class="mb-0 ps-2 tsmall">
+                                    @item.Content
+                                </p>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <p class="tsmall text-secondary">Решите или откройте решения для этого задания, чтобы увидеть комментарии и решения других</p>         
+        }
     </div>
 </div>
 

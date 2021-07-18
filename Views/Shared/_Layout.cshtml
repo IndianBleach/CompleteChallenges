@@ -93,6 +93,15 @@
             </div>
         </div>
     </main>
+    <script type="text/javascript" src="~/dist/enlighterjs.min.js"></script>
+    <script type="text/javascript">
+
+        EnlighterJS.init("pre", "code", {
+            language: "python",
+            theme: "bootstrap4",
+            indent: 2
+        });
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

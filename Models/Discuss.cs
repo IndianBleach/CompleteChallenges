@@ -11,11 +11,15 @@ namespace Project.Models
         public User Author { get; set; }
         public string Name { get; set; }
         public string Content { get; set; }
+        public ICollection<Tag> Tags { get; set; }
         public ICollection<Reply> Replies { get; set; }
         public DateTime DateCreated { get; set; }
 
-        public Discuss() =>
+        public Discuss()
+        {
             Replies = new List<Reply>();
+            Tags = new List<Tag>();
+        }            
     }
 
     public class Reply

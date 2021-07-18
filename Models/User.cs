@@ -14,6 +14,12 @@ namespace Project.Models
             Users = new List<User>();       
     }
 
+    public class Avatar
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }    
+    }
+
     public class User
     {
         public int Id { get; set; }
@@ -21,6 +27,9 @@ namespace Project.Models
         public string Password { get; set; }
         public string Email { get; set; }
         public int Score { get; set; }
+        public string About { get; set; }
+        public Avatar Avatar { get; set; }
+        public string GitHubLink { get; set; }
         public ICollection<ChallengeLike> ChallengeLikes { get; set; }
         public ICollection<Solution> MySolutions { get; set; }
         public ICollection<Challenge> MyChallenges { get; set; }
@@ -28,12 +37,14 @@ namespace Project.Models
         public ICollection<Discuss> MyDiscusses { get; set; }
         public ICollection<Reply> Replies { get; set; }
         public ICollection<UserEvent> Events { get; set; }
+        public ICollection<ChallengeReport> Reports { get; set; }
         public int RoleId { get; set; }
         public UserRole Role { get; set; }
         public DateTime DateCreated { get; set; }
 
         public User()
         {
+            Reports = new List<ChallengeReport>();
             MySolutions = new List<Solution>();
             MyChallenges = new List<Challenge>();
             UnlockedChallenges = new List<Challenge>();

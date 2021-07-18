@@ -22,21 +22,22 @@ namespace Project.Services
                 Discuss findDis =  _ctx.Discusses
                     .Include(x => x.Author)
                     .Include(x => x.Replies)
+                    .Include(x => x.Tags)
                     .FirstOrDefault(x =>
                     x.Id == discussId);
 
                 if (findDis != null) return findDis;
             }
-
             return null;
         }
 
-        public Discuss AddReplyAndGetDiscuss(string authorUsername, string replyContent, int? discussId)
+        public Discuss AddReplyHook(string authorUsername, string replyContent, int? discussId)
         {
             if (discussId != null)
             {
                 Discuss findDiscuss = _ctx.Discusses
                     .Include(x => x.Replies)
+                    .Include(x => x.Tags)
                     .FirstOrDefault(x =>
                         x.Id == discussId);
 
@@ -62,21 +63,29 @@ namespace Project.Services
         {
             List<Discuss> all = _ctx.Discusses
                 .Include(x => x.Author)
+                .Include(x => x.Tags)
                 .Include(x => x.Replies)
                 .ToList();
 
             return all;
         }
 
-        public async Task AddDiscuss(string authorUsername, string discussContent, string discussName)
+        public async Task AddDiscuss(string authorUsername, string discussContent, string discussName, ICollection<string> tags)
         {
+            List<Tag> buildTagList = new List<Tag>();
+            foreach (var item in tags)
+            {
+                buildTagList.Add(_ctx.Tags.FirstOrDefault(x => x.Name == item));
+            }
+
             _ctx.Discusses.Add(new Discuss
             {
                 Author = await _ctx.Users.FirstOrDefaultAsync(x => x.Username == authorUsername),
                 Content = discussContent,
                 DateCreated = DateTime.Now,
                 Name = discussName,
-                Replies = new List<Reply>()
+                Replies = new List<Reply>(),
+                Tags = buildTagList
             });
             await _ctx.SaveChangesAsync();
         }

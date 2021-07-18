@@ -35,7 +35,7 @@ namespace Project.Controllers
         [Authorize]
         public IActionResult AddReply(int? discussId, string replyContent)
         {
-            Discuss updatedDiscuss = _discussService.AddReplyAndGetDiscuss(User.Identity.Name, replyContent, discussId);
+            Discuss updatedDiscuss = _discussService.AddReplyHook(User.Identity.Name, replyContent, discussId);
 
             if (updatedDiscuss != null)
                 return View("replies", updatedDiscuss);

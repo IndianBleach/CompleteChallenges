@@ -19,40 +19,187 @@ namespace Project.Controllers
         private ApplicationContext _ctx;
         private ChallengeService _challengeService;
         private UserActivityService _activityService;
+        private UserSolutionService _solutionService;
 
-        public ChallengeController(ApplicationContext ctx, ChallengeService challengeService, UserActivityService activityServ)
+        public ChallengeController(ApplicationContext ctx, ChallengeService challengeService, UserActivityService activityServ, UserSolutionService solServ)
         {
             _ctx = ctx;
             _challengeService = challengeService;
             _activityService = activityServ;
+            _solutionService = solServ;
+        }
+
+
+        public IActionResult AddReport(int? challenge, string lang, string reportContent)
+        {
+            if (challenge != null)
+            {
+                Challenge findChallenge = _challengeService.GetChallengeById(challenge);
+
+                if (findChallenge != null)
+                {
+                    _ctx.ChallengeReports.Add(new ChallengeReport()
+                    {
+                        Content = reportContent,
+                        Author = _ctx.Users.FirstOrDefault(x => x.Username == User.Identity.Name),
+                        OnChallenge = findChallenge
+                    });
+
+                    _ctx.SaveChanges();
+
+                    ViewBag.LangName = lang;
+                    ViewBag.Unlocked = true;
+                    ViewBag.Section = "comments";
+
+                    return View("solve", findChallenge);
+                }
+            }
+            return RedirectToAction("index");
+        }
+
+
+        [Authorize]
+        public IActionResult Unlock(int? challenge, string lang)
+        { 
+            if (challenge != null)
+            {
+                Challenge findChallenge = _challengeService.GetChallengeById(challenge);
+
+                User findUser = _ctx.Users.FirstOrDefault(x => x.Username == User.Identity.Name);
+
+                bool checkToUnlock = false;
+                if (findChallenge != null && findUser != null)
+                {
+                    checkToUnlock = findChallenge.UsersWhoUnlocked.Contains(findUser);
+                }
+
+                if (!checkToUnlock)
+                {
+                    if (findUser.Score >= findChallenge.Level.Score / 2)
+                    {
+                        findChallenge.UsersWhoUnlocked.Add(findUser);
+                        findUser.Score -= findChallenge.Level.Score / 2;
+
+                        ViewBag.LangName = lang;
+
+                        ViewBag.Unlocked = true;
+                    }
+                    else
+                    {
+                        ViewBag.ErrorUserScore = true;
+                    }
+                    return View("solve", findChallenge);
+                }    
+                //else if (checkToUnlock)
+            }
+            return RedirectToAction("index");
         }
 
         #region POST ENDPOINTS
         [Authorize]
+        public IActionResult AddComment(int? challengeId, string commentContent, string lang)
+        {
+            if (challengeId != null)
+            {
+                Challenge findChallenge = _challengeService.GetChallengeById(challengeId);
+
+                if (findChallenge != null)
+                {
+                    _ctx.ChallengeComments.Add(new ChallengeComment()
+                    {
+                        Author = _ctx.Users.FirstOrDefault(x =>
+                            x.Username == User.Identity.Name),
+                        Content = commentContent,
+                        CreatedDateStr = DateTime.Now.ToShortDateString(),
+                        OnChallenge = findChallenge
+                    });
+                    _ctx.SaveChanges();
+                }
+
+                ViewBag.LangName = lang;
+                ViewBag.Unlocked = true;
+                ViewBag.Section = "comments";
+
+                return View("solve", findChallenge);
+            }
+            return RedirectToAction("index");
+        }
+
+
         [HttpPost]
-        public IActionResult Solve(string solution, int? testId)
-        {            
+        [Authorize]
+        public async Task<IActionResult> Submit(string solution, int? testId)
+        {
             if (testId != null)
             {
+                SolutionResult result = _solutionService.GetSolutionResult(solution, (int)testId, User.Identity.Name);
+
+                if (result.CanUserSubmitSolution == true)
+                {
+                    User user = _ctx.Users.FirstOrDefault(x => x.Username == User.Identity.Name);
+
+                    var obj = _ctx.Tests
+                    .Include(x => x.ProgLanguage)
+                    .Include(x => x.Challenge)
+                    .FirstOrDefault(x => x.Id == testId);
+
+                    Challenge challenge = _challengeService.GetChallengeById(obj.Challenge.Id);
+
+                    var checkAlreadySolved = user.MySolutions.FirstOrDefault(x => x.Challenge.Id == challenge.Id && x.ProgLanguage.Name == obj.ProgLanguage.Name);
+
+                    if (checkAlreadySolved == null)
+                    {
+                        challenge.UsersWhoUnlocked.Add(user);
+
+                        _ctx.Solutions.Add(new Solution
+                        {
+                            SolutionContent = solution,
+                            Author = user,
+                            Challenge = challenge,
+                            DateCreated = DateTime.Now,
+                            ProgLanguage = obj.ProgLanguage
+                        });
+
+                        bool checkChallengeAuthor = challenge.Author == user ? true : false;
+                        if (!checkChallengeAuthor)
+                        {
+                            user.Score += challenge.Level.Score;
+                        }
+
+                        await _ctx.SaveChangesAsync();
+
+                        await _activityService.AddUserActivityEvent(User.Identity.Name, $"Решение {obj.ProgLanguage.Name} {challenge.Name}");
+                    }
+
+                    ViewBag.LangName = obj.ProgLanguage.Name;
+                    ViewBag.Unlocked = true;
+                    return View("solve", challenge);
+                }
+            }
+            return RedirectToAction("index");
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Solve(string solution, int? testId)
+        {
+            if (testId != null)
+            {
+                SolutionResult result = _solutionService.GetSolutionResult(solution, (int)testId, User.Identity.Name);
+
                 //need fix
                 var obj = _ctx.Tests
                     .Include(x => x.ProgLanguage)
                     .Include(x => x.Challenge)
                     .FirstOrDefault(x => x.Id == testId);
 
-                var challenge = _challengeService.GetChallengeById(obj.Challenge.Id);
-
-                //need fix
-                SolutionResult solResolt = (obj.ProgLanguage.Name) switch
-                {
-                    "Python" => solResolt = new PythonSolutionEngine().BuildResult(User.Identity.Name, obj.TestContent, solution),
-                    "Csharp" => solResolt = new CsharpSolutionEngine().BuildResult(User.Identity.Name, obj.TestContent, solution),
-                    _ => new SolutionResult { CanUserSubmitSolution = false, ResultContent = "solution engine error"}
-                };
-
-                ViewBag.Res = solResolt.ResultContent;
+                ViewBag.Res = result.ResultContent;
                 ViewBag.OldSolution = solution;
+                ViewBag.SolutionStatus = result.CanUserSubmitSolution;
                 ViewBag.LangName = obj.ProgLanguage.Name;
+
+                Challenge challenge = _challengeService.GetChallengeById(obj.Challenge.Id);
 
                 return View("Solve", challenge);
             }            
@@ -75,13 +222,24 @@ namespace Project.Controllers
 
         #region GET ENDPOINTS
         [HttpGet]
-        public IActionResult Solve(int? challenge, string lang)
+        public IActionResult Solve(int? challenge, string lang, string? section)
         {
             Challenge findChallenge = _challengeService.GetChallengeById(challenge);
 
+            if (section == null)
+            {
+                section = "solutions";
+            }            
+
             if (findChallenge != null)
             {
-                ViewBag.LangName = lang;               
+                ViewBag.Section = section;
+
+                ViewBag.LangName = lang;
+
+                var checkUserUnlock = findChallenge.UsersWhoUnlocked.FirstOrDefault(x => x.Username == User.Identity.Name);
+                if (checkUserUnlock != null)
+                    ViewBag.Unlocked = true;
 
                 return View("solve", findChallenge);
             }

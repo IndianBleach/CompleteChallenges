@@ -29,11 +29,14 @@ namespace Project.Services
                     .Include(x => x.Author)
                     .Include(x => x.Solutions)
                     .Include(x => x.Tags)
+                    .Include(x => x.Comments)
+                    .ThenInclude(x => x.Author)
                     .Include(x => x.Level)
                     .Include(x => x.Tests)
                     .ThenInclude(x => x.ProgLanguage)
                     .Include(x => x.Likes)
                     .Include(x => x.UsersWhoUnlocked)
+                    .Include(x => x.Reports)
                     .FirstOrDefault(x => x.Id == id);
 
                 return findChallenge;
@@ -47,7 +50,9 @@ namespace Project.Services
                 .Include(x => x.Author)
                 .Include(x => x.Solutions)
                 .Include(x => x.Tags)
+                .Include(x => x.Comments)
                 .Include(x => x.Level)
+                .Include(x => x.Reports)
                 .Include(x => x.Tests)
                     .ThenInclude(x => x.ProgLanguage)
                .Include(x => x.Likes)
@@ -79,18 +84,19 @@ namespace Project.Services
                     x.Username == authorUsername),
                 Description = challengeModel.Description,
                 Name = challengeModel.Name,
-                Score = 0,
                 DateCreated = DateTime.Now,
                 Level = _ctx.ChallengeLevels.FirstOrDefault(x =>
                     x.Name == challengeModel.Level),
                 Likes = new List<ChallengeLike>(),
                 Solutions = new List<Solution>(),
+                Comments = new List<ChallengeComment>(),
+                Reports = new List<ChallengeReport>(),
                 Tags = tagList,
                 UsersWhoUnlocked = new List<User>(),
                 Tests = new List<Test>()
             };
             #endregion
-
+            
             #region BUILD CHALLENGE TESTS  
             List<Test> challengeTests = new List<Test>();
             if (includeCsharp)
@@ -99,12 +105,11 @@ namespace Project.Services
                     _csBuilder.BuildTest(
                     newChallenge,
                     _ctx.ProgramLanguages.FirstOrDefault(x =>
-                        x.Name == "C#"),
+                        x.Name == "Csharp"),
                     challengeModel.CsharpTest
                     )
                 );
             }
-
             
 
             if (includePython)

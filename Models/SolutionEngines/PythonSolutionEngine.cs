@@ -11,11 +11,11 @@ namespace Project.Models.SolutionEngines
     {
         public SolutionResult BuildResult(string authorUsername, string test, string solution)
         {
-            return base.BuildSolutionResult(authorUsername, test, _handlerContent, solution);
+            return base.BuildPythonSolutionResult(authorUsername, test, _handlerContent, solution);
         }
 
         //fix
-        private StringBuilder _handlerContent
+        private string _handlerContent
         {
             get
             {
@@ -25,9 +25,8 @@ namespace Project.Models.SolutionEngines
                     fstream.Read(array, 0, array.Length);
 
                     string textFromFile = System.Text.Encoding.Default.GetString(array);
-                    var builder = new StringBuilder();
-                    builder.Append(textFromFile);
-                    return builder;
+
+                    return textFromFile;
                 }
             }
         }    

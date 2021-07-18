@@ -5,6 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Project.Models.ValidModels;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Project.Services
 {
@@ -14,6 +18,27 @@ namespace Project.Services
         public AuthorizeService(ApplicationContext ctx)
         {
             _ctx = ctx;
+        }
+
+        public async Task GoAuthenticate(User user, HttpContext ctx)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Username),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
+            };
+
+            ClaimsIdentity id = new ClaimsIdentity(claims, "app_authorize_cokie",
+                ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType
+                );
+
+            await ctx.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
+
+        public async Task SignOutAsync(HttpContext ctx)
+        {
+            await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         public User RegisterUser(UserRegister regUser)
@@ -30,6 +55,10 @@ namespace Project.Services
                 MySolutions = new List<Solution>(),
                 Replies = new List<Reply>(),
                 Score = 0,
+                About = "Информации о пользователе пока нет",
+                Reports = new List<ChallengeReport>(),
+                Avatar = _ctx.Avatars.FirstOrDefault(x =>
+                    x.Name == "default_user_avatar221.jpg"),
                 ChallengeLikes = new List<ChallengeLike>(),
                 UnlockedChallenges = new List<Challenge>(),
                 Role = _ctx.UserRoles.FirstOrDefault(x =>
@@ -65,11 +94,6 @@ namespace Project.Services
             if (findUser != null) return findUser;
 
             return null;
-        }
-
-        public void AddUserActivityEvent()
-        { 
-        
-        }                
+        }           
     }
 }

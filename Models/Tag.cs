@@ -10,8 +10,13 @@ namespace Project.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<Challenge> Challenges { get; set; }
+        public ICollection<Discuss> Discusses { get; set; }
 
-        public Tag() =>
+        public Tag()
+        {
             Challenges = new List<Challenge>();
+            Discusses = new List<Discuss>();
+        }
+           
     }
 }

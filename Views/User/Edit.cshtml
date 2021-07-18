@@ -1,0 +1,35 @@
+﻿@model Project.Models.User
+
+@{
+    Layout = "ProfileLayout";
+}
+
+<div class="col-12 d-flex justify-content-center pt-4">
+    <div class=" col-12 col-md-8 col-lg-5">
+        <div class="mt-2 mb-2 col-12 text-center">
+            <h4 class="tbig">Редактировать данные аккаунта @ViewBag.SelfUsername</h4>
+        </div>
+        <form class="border col-12 p-4 rounded" asp-action="edit" asp-controller="user" method="post" enctype="multipart/form-data">
+            <div class="tsmall d-grid">
+                <label class="tsmall" for="exampleFormControlFile1">Аватар</label>
+                <input name="avatar" type="file" class="tsmall mb-2 form-control-file" id="exampleFormControlFile1">
+            </div>
+            <label class="tsmall">Имя пользователя</label>
+            <input name="username" class="mb-2 form-control-sm form-control" placeholder="@ViewBag.SelfUsername" />
+            <label class="tsmall">Старый пароль</label>
+            <input name="oldPass" class="mb-2 form-control-sm form-control" />
+            <label class="tsmall">Новый пароль</label>
+            <input name="newPass" class="mb-2 form-control-sm form-control" />
+            <label class="tsmall">Email</label>
+            <input name="email" class="mb-2 form-control-sm form-control" placeholder="@ViewBag.SelfEmail" />
+            <label class="tsmall">GitHub ссылка</label>
+            <input name="githubLink" class="mb-2 form-control-sm form-control" placeholder="@ViewBag.SelfGitHub" />
+            <label class="tsmall">О себе</label>
+            <textarea name="about" rows="4" class="mb-2 form-control-sm form-control" placeholder="@ViewBag.SelfAbout"></textarea>
+            <div class="col-12 d-flex justify-content-between">
+                <button type="submit" class="btn btn-submit">Сохранить</button>
+                <a class="btn btn-danger">Удалить аккаунт</a>
+            </div>
+        </form>
+    </div>
+</div>

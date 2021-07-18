@@ -41,7 +41,7 @@ namespace Project.Controllers
 
                 if (existUser != null)
                 {
-                    await GoAuthenticate(existUser);
+                    await _authService.GoAuthenticate(existUser, HttpContext);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -62,7 +62,7 @@ namespace Project.Controllers
                 {
                     User newUser = _authService.RegisterUser(regUser);
 
-                    await GoAuthenticate(newUser);
+                    await _authService.GoAuthenticate(newUser, HttpContext);
 
                     return RedirectToAction("index", "home");
                 }
@@ -71,21 +71,6 @@ namespace Project.Controllers
             return View(regUser);
         }
 
-        public async Task GoAuthenticate(User user)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Username),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
-            };
-
-            ClaimsIdentity id = new ClaimsIdentity(claims, "app_authorize_cokie", 
-                ClaimsIdentity.DefaultNameClaimType,
-                ClaimsIdentity.DefaultRoleClaimType
-                );
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
-        }
         #endregion
 
         #region :GET ENDPOINTS

@@ -93,25 +93,31 @@
             <div class="col">
                 <section>
                     <div class="container bg-white rounded border p-4 d-flex">
-                        <div class="ms-md-4">
-                            <div id="profileAvatar" class="bg-light">
-                            </div>
+                        <div class="col-2">
+                            <img id="profileAvatar" class="bg-light" src="~/media/avatars/@Model.Avatar?.Name" />
                             <div class="text-center pt-4">
                                 <h3>@Model.Username</h3>
                                 <p class="tspecial">Score: @Model.Score</p>
                                 <div class="text-start">
-                                    <p class="tsmall tbg-desc p-2 border rounded">
-                                        About о юзере информация о юзере
-                                        About о юзере информация о юзереAbout о юзере информация о юзере
+                                    <p class="text-break tsmall tbg-desc p-2 border rounded">
+                                        @Model.About
                                     </p>
                                 </div>
                             </div>
                             <div class="text-center pt-0 col-12 d-flex">
                                 @if (ViewBag.SelfUserProfile == true && User.Identity.IsAuthenticated)
                                 {
-                                    <button class="btn-primary btn col-12">Редактировать</button>
+                                    <a asp-action="edit" asp-controller="user" class="btn-primary btn col-12">Редактировать</a>
                                 }
                             </div>
+                            @if (ViewBag.SelfUserProfile == true && User.Identity.IsAuthenticated)
+                            { 
+                            <form class="mt-4 border rounded p-2 text-center" asp-action="delete" asp-controller="user">
+                                <p class="tsmall text-secondary">Для удаление аккаунта введите свой пароль</p>
+                                <input name="password" class="mb-2 form-control form-control-sm" placeholder="Введите пароль" />
+                                <button type="submit" class="btn btn-danger">Удалить аккаунт</button>
+                            </form>
+                            }
                         </div>
                         <div class="col-10 pt-4">
                             <div class="col-12 justify-content-around d-flex">
