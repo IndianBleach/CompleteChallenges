@@ -16,7 +16,9 @@ namespace Project.Services
             _ctx = ctx;
         }
 
-        public async Task AddUserActivityEvent(string forAuthorUsername, string titleContent)
+        //delete activity
+
+        public async Task AddActivity(string forAuthorUsername, string titleContent)
         {
             _ctx.UserEvents.Add(new UserEvent
             {
@@ -29,7 +31,7 @@ namespace Project.Services
             await _ctx.SaveChangesAsync();
         }
 
-        public List<UserEvent> GetUserActivityEvents(string forUsername)
+        public List<UserEvent> GetUserActivity(string forUsername)
         {
             if (forUsername != null)
             {
@@ -39,7 +41,6 @@ namespace Project.Services
 
                 return userEvents;
             }
-
             return null;
         }
     }

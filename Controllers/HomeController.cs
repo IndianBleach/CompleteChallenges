@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Project.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Project.Services;
 
 namespace Project.Controllers
 {
@@ -15,28 +16,18 @@ namespace Project.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private ApplicationContext _ctx;
+        private ChallengeService _challengeService;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationContext ctx)
+        public HomeController(ILogger<HomeController> logger, ApplicationContext ctx, ChallengeService challengeServ)
         {
             _logger = logger;
             _ctx = ctx;
+            _challengeService = challengeServ;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            List<Challenge> challenges = await _ctx.Challenges
-                .Include(x => x.Author)
-                .Include(x => x.Reports)
-                .Include(x => x.UsersWhoUnlocked)
-                .Include(x => x.Tests)
-                .ThenInclude(x => x.ProgLanguage)
-                .Include(x => x.Likes)
-                .Include(x => x.Tags)
-                .Include(x => x.Solutions)
-                .Include(x => x.Level)
-                .ToListAsync();
-
-            //viewbag discusses
+            var challenges = _challengeService.GetAllChallenges();
 
             return View(challenges);
         }

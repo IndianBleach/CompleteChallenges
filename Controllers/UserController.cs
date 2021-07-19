@@ -37,13 +37,17 @@ namespace Project.Controllers
             User findUser = await _ctx.Users
                 .Include(x => x.Events)
                 .Include(x => x.Avatar)
+                .Include(x => x.Reports)
                 .Include(x => x.MyChallenges)
+                .Include(x => x.Comments)
                 .Include(x => x.MyDiscusses)
                 .Include(x => x.MySolutions)
                 .ThenInclude(x => x.Challenge)
                 .Include(x => x.MyChallenges)
                 .ThenInclude(x => x.Tests)
                 .FirstOrDefaultAsync(x => x.Username == User.Identity.Name && x.Password == password);
+
+            _ctx.Challenges.RemoveRange(_ctx.Challenges.Where(x => x.Author == findUser));
 
             if (findUser != null)
             {
@@ -101,7 +105,7 @@ namespace Project.Controllers
             }
             await _ctx.SaveChangesAsync();
 
-            await _authorizeService.GoAuthenticate(tryFindUser, HttpContext);
+            await _authorizeService.SignInAsync(tryFindUser, HttpContext);
 
             ViewBag.SelfUserProfile = true;
 

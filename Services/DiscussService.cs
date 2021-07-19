@@ -15,23 +15,58 @@ namespace Project.Services
             _ctx = ctx;
         }
 
-        public Discuss GetDiscussWithReplies(int? discussId)
+        public async Task CreateDiscuss(string authorUsername, string discussContent, string discussName, ICollection<string> tags)
+        {
+            List<Tag> buildTagList = new List<Tag>();
+            foreach (var item in tags)
+            {
+                buildTagList.Add(_ctx.Tags.FirstOrDefault(x => x.Name == item));
+            }
+
+            _ctx.Discusses.Add(new Discuss
+            {
+                Author = await _ctx.Users.FirstOrDefaultAsync(x => x.Username == authorUsername),
+                Content = discussContent,
+                DateCreated = DateTime.Now,
+                Name = discussName,
+                Replies = new List<Reply>(),
+                Tags = buildTagList
+            });
+            await _ctx.SaveChangesAsync();
+        }
+
+        public async Task DeleteDiscuss(int? discussId)
         {
             if (discussId != null)
             {
-                Discuss findDis =  _ctx.Discusses
+                Discuss getDiscuss = await _ctx.Discusses
+                    .Include(x => x.Replies)
+                    .FirstOrDefaultAsync(x => x.Id == discussId);
+
+                if (getDiscuss != null)
+                    _ctx.Discusses.Remove(getDiscuss);
+
+                await _ctx.SaveChangesAsync();
+            }
+        }
+
+        public Discuss GetDiscuss(int? discussId)
+        {
+            if (discussId != null)
+            {
+                Discuss getDuscuss = _ctx.Discusses
                     .Include(x => x.Author)
                     .Include(x => x.Replies)
                     .Include(x => x.Tags)
                     .FirstOrDefault(x =>
-                    x.Id == discussId);
+                        x.Id == discussId);
 
-                if (findDis != null) return findDis;
+                if (getDuscuss != null) return getDuscuss;
             }
             return null;
         }
 
-        public Discuss AddReplyHook(string authorUsername, string replyContent, int? discussId)
+        public Discuss AddDiscussReply(string authorUsername, string replyContent, int? discussId)
         {
             if (discussId != null)
             {
@@ -69,26 +104,5 @@ namespace Project.Services
 
             return all;
         }
-
-        public async Task AddDiscuss(string authorUsername, string discussContent, string discussName, ICollection<string> tags)
-        {
-            List<Tag> buildTagList = new List<Tag>();
-            foreach (var item in tags)
-            {
-                buildTagList.Add(_ctx.Tags.FirstOrDefault(x => x.Name == item));
-            }
-
-            _ctx.Discusses.Add(new Discuss
-            {
-                Author = await _ctx.Users.FirstOrDefaultAsync(x => x.Username == authorUsername),
-                Content = discussContent,
-                DateCreated = DateTime.Now,
-                Name = discussName,
-                Replies = new List<Reply>(),
-                Tags = buildTagList
-            });
-            await _ctx.SaveChangesAsync();
-        }
-
     }
 }

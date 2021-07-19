@@ -15,19 +15,17 @@ namespace Project.Controllers
 {
     public class AuthorizeController : Controller
     {
-        private ApplicationContext _ctx;
         private AuthorizeService _authService;
 
-        public AuthorizeController(ApplicationContext ctx, AuthorizeService authServ)
+        public AuthorizeController(AuthorizeService authServ)
         {
-            _ctx = ctx;
             _authService = authServ;
         }
 
         #region :POST ENDPOINTS
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await _authService.SignOutAsync(HttpContext);
             return RedirectToAction("login", "authorize");
         }
 
@@ -37,11 +35,10 @@ namespace Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                User existUser = _authService.GetUserByData(logUser);
-
+                User existUser = _authService.GetUserByLoginForm(logUser);
                 if (existUser != null)
                 {
-                    await _authService.GoAuthenticate(existUser, HttpContext);
+                    await _authService.SignInAsync(existUser, HttpContext);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -56,13 +53,11 @@ namespace Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                User isUserAlreadyExist = _authService.GetUserByUsername(regUser.Username);
-
-                if (isUserAlreadyExist == null)
+                if (!_authService.IsUserAlreadyExist(regUser.Username))
                 {
-                    User newUser = _authService.RegisterUser(regUser);
+                    User newUser = _authService.Register(regUser);
 
-                    await _authService.GoAuthenticate(newUser, HttpContext);
+                    await _authService.SignInAsync(newUser, HttpContext);
 
                     return RedirectToAction("index", "home");
                 }
@@ -70,7 +65,6 @@ namespace Project.Controllers
             }
             return View(regUser);
         }
-
         #endregion
 
         #region :GET ENDPOINTS

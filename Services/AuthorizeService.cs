@@ -20,7 +20,7 @@ namespace Project.Services
             _ctx = ctx;
         }
 
-        public async Task GoAuthenticate(User user, HttpContext ctx)
+        public async Task SignInAsync(User user, HttpContext ctx)
         {
             var claims = new List<Claim>
             {
@@ -41,7 +41,7 @@ namespace Project.Services
             await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
-        public User RegisterUser(UserRegister regUser)
+        public User Register(UserRegister regUser)
         {
             User buildUser = new Models.User
             {
@@ -71,9 +71,8 @@ namespace Project.Services
             return buildUser;
         }
 
-        public User GetUserByData(UserLogin logUser)
+        public User GetUserByLoginForm(UserLogin logUser)
         {
-
             User findUser = _ctx.Users
                 .Include(x => x.Role)
                 .FirstOrDefault(x =>
@@ -84,16 +83,15 @@ namespace Project.Services
             return null;
         }
 
-        public User GetUserByUsername(string username)
+        public bool IsUserAlreadyExist(string username)
         {
-
             User findUser = _ctx.Users
                 .FirstOrDefault(x =>
                     x.Username == username);
 
-            if (findUser != null) return findUser;
+            if (findUser != null) return true;
 
-            return null;
-        }           
+            return false;
+        }
     }
 }

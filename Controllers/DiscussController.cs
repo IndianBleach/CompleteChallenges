@@ -22,10 +22,21 @@ namespace Project.Controllers
         }
 
         [Authorize]
+        public async Task<IActionResult> Delete(int? discussId)
+        {
+            if (discussId != null)
+                await _discussService.DeleteDiscuss(discussId);
+
+            List<Discuss> discusses = _discussService.GetAllDiscusses();
+
+            return View("index", discusses);
+        }
+
+        [Authorize]
         public async Task<IActionResult> Create(string discussContent, string discussName, ICollection<string> tags)
         {
             if (discussContent != null && discussName != null)
-                await _discussService.AddDiscuss(User.Identity.Name, discussContent, discussName, tags);
+                await _discussService.CreateDiscuss(User.Identity.Name, discussContent, discussName, tags);
 
             List<Discuss> discusses = _discussService.GetAllDiscusses();
 
@@ -35,7 +46,7 @@ namespace Project.Controllers
         [Authorize]
         public IActionResult AddReply(int? discussId, string replyContent)
         {
-            Discuss updatedDiscuss = _discussService.AddReplyHook(User.Identity.Name, replyContent, discussId);
+            Discuss updatedDiscuss = _discussService.AddDiscussReply(User.Identity.Name, replyContent, discussId);
 
             if (updatedDiscuss != null)
                 return View("replies", updatedDiscuss);
@@ -45,7 +56,7 @@ namespace Project.Controllers
 
         public IActionResult Replies(int? discuss)
         {
-            Discuss loadDiscuss = _discussService.GetDiscussWithReplies(discuss);
+            Discuss loadDiscuss = _discussService.GetDiscuss(discuss);
 
             if (loadDiscuss != null)
                 return View("replies", loadDiscuss);
