@@ -96,12 +96,9 @@
                                     <textarea name="solution" hidden>@ViewBag.OldSolution</textarea>
                                     <input hidden name="testId" value="@Model.Tests.FirstOrDefault(x => x.ProgLanguage.Name == ViewBag.LangName).Id" />
                                 }
-                                @if (ViewBag.Unlocked != null)
+                                @if (ViewBag.Unlocked == null)
                                 {
-                                    if (ViewBag.Unlocked != true)
-                                    {
                                     <a asp-action="unlock" asp-controller="challenge" asp-route-challenge="@Model.Id" asp-route-lang="@ViewBag.LangName" class="btn btn-action">Открыть решения</a>
-                                    }
                                 }
                                 @if (ViewBag.SolutionStatus != null)
                                 {
