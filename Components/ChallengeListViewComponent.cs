@@ -1,22 +1,23 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Project.Services;
 
 namespace Project.Components
 {
     public class ChallengeListViewComponent : ViewComponent
     {
-        public ChallengeListViewComponent()
-        {  
-            
+        private ChallengeService _challengeService;
+        public ChallengeListViewComponent(ChallengeService challengeServ)
+        {
+            _challengeService = challengeServ;
         }
+
         public IViewComponentResult Invoke()
         {
-            return View();
+            return View(_challengeService.GetAllChallenges());
         }
     }
 }

@@ -6,48 +6,157 @@
 
 }
 
-
+<div class="col-12 pt-3 pb-3 text-center">
+    <h4>Codebreed</h4>
+</div>
 <section>
-    <div class="col-12 border rounded bg-white ps-3 pe-3 pb-2">
-        <div class="col-12 text-center bg-white pt-4">
-            <h4 class="mb-0 tbig">
-                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="me-2 bi bi-code-slash" viewBox="0 0 16 16">
-                    <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z" />
-                </svg>
-                Задания сообщества
-            </h4>
-            <div class="d-flex col-12 justify-content-center">
-                <p class="tsmall pt-1">
-                    Решайте, создавайте, прокачивайтесь, изучайте новое
-                </p>
-                <a asp-action="create" asp-controller="challenge" class="ms-1 btn btn-submit">Создать задание</a>
+    <div class="mb-4">
+        <h4 class="mb-1">Внесите свой вклад</h4>
+        <div class="p-3 border rounded">
+            <h5 class="section-d">
+                Вы можете создать собственные задания на следующих языках:
+                <b>Python</b>
+            </h5>
+            <div class="border pe-4 rounded p-2 d-flex align-items-center justify-content-between">
+                <div>
+                    <p class="mb-1">1. Придумайте название</p>
+                    <p class="mb-1">
+                        2. Дайте вашему заданию несколько тегов для хорошего поиска
+                    </p>
+                    <p class="mb-1">
+                        3. Напишите тест к заданию, чтобы другие могли выполнить его
+                    </p>
+                </div>
+                <a asp-action="create" asp-controller="challenge" class="btn btn-success">Создать</a>
             </div>
-        </div>
-        <div class="bg-light p-2 mt-2 col-12 border bg-lighjt rounded p-2">
-            <div class="pt-2 col-12 ">
-                @await Component.InvokeAsync("ChallengeList")
-            </div>
-            <div class="text-center col-12">
-                <a asp-action="index" asp-controller="challenge" class="btn btn-action">Больше заданий</a>
-            </div>
-        </div>
-        <div class="col-12 text-center bg-white pt-4">
-            <h4 class="mb-0 tbig">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-chat-quote-fill" viewBox="0 0 16 16">
-                    <path d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM7.194 6.766a1.688 1.688 0 0 0-.227-.272 1.467 1.467 0 0 0-.469-.324l-.008-.004A1.785 1.785 0 0 0 5.734 6C4.776 6 4 6.746 4 7.667c0 .92.776 1.666 1.734 1.666.343 0 .662-.095.931-.26-.137.389-.39.804-.81 1.22a.405.405 0 0 0 .011.59c.173.16.447.155.614-.01 1.334-1.329 1.37-2.758.941-3.706a2.461 2.461 0 0 0-.227-.4zM11 9.073c-.136.389-.39.804-.81 1.22a.405.405 0 0 0 .012.59c.172.16.446.155.613-.01 1.334-1.329 1.37-2.758.942-3.706a2.466 2.466 0 0 0-.228-.4 1.686 1.686 0 0 0-.227-.273 1.466 1.466 0 0 0-.469-.324l-.008-.004A1.785 1.785 0 0 0 10.07 6c-.957 0-1.734.746-1.734 1.667 0 .92.777 1.666 1.734 1.666.343 0 .662-.095.931-.26z" />
-                </svg>
-                Обсуждения сообщества
-            </h4>
-            <div class="d-flex col-12 justify-content-center">
-                <p class="tsmall pt-1">
-                    Делитесь мнением с другими, помогайте другим и помогут вам
-                </p>
-                <a asp-action="create" asp-controller="discuss" class="ms-1 btn btn-submit">Создать обсуждение</a>
-            </div>
-        </div>
-        <div class="border rounded p-2 bg-light">
-            @await Component.InvokeAsync("ParticalDiscussList")
         </div>
     </div>
 </section>
-    
+<section>
+    <div class="mb-4">
+        <h4 class="mb-1">Задания сообщества</h4>
+        <div class="p-3 border rounded">
+            <div class="col-12 d-flex justify-content-around">
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                        Поиск заданий
+                    </button>
+                    <div class="dropdown-menu"
+                         aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                        Поиск заданий
+                    </button>
+                    <div class="dropdown-menu"
+                         aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>
+            <hr class="m-0 mb-2" />
+            <!---->
+            @await Component.InvokeAsync("ChallengeList")
+            <div class="text-center col-12">
+                <a asp-action="index" asp-controller="challenge" class="btn btn-light">Больше заданий</a>
+            </div>
+            <!---->
+        </div>
+    </div>
+</section>
+<section>
+    <div class="mb-4">
+        <h4 class="mb-1">Начните новое обсуждение</h4>
+        <div class="p-3 border rounded">
+            <h5 class="section-d">
+                Поделитесь идеей, мнением, проблемой с другими, чтобы вам
+                ответили
+            </h5>
+            <div class="border pe-4 rounded p-2 d-flex align-items-center justify-content-between">
+                <div>
+                    <p class="mb-1">1. Придумайте заголовок</p>
+                    <p class="mb-1">
+                        2. Опишите свою проблему или ситуацию
+                    </p>
+                    <p class="mb-1">
+                        3. Несколько тегов по данной теме
+                    </p>
+                </div>
+                <a asp-action="create" asp-controller="discuss" class="btn btn-success">Создать</a>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="mb-4">
+        <h4 class="mb-1">Обсуждения сообщества</h4>
+        <div class="p-3 border rounded">
+            <div class="col-12 d-flex justify-content-around">
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                        Поиск заданий
+                    </button>
+                    <div class="dropdown-menu"
+                         aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                        Поиск заданий
+                    </button>
+                    <div class="dropdown-menu"
+                         aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>
+            <hr class="m-0 mb-2" />
+            <!---->
+            @await Component.InvokeAsync("DiscussList") 
+            <!---->
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script type="text/javascript" src="~/dist/enlighterjs.min.js"></script>
+    <script type="text/javascript">
+            EnlighterJS.init("pre", "code", {
+                language: "python, csharp",
+                theme: "bootstrap4",
+                indent: 2
+            });
+    </script>
+}
+
