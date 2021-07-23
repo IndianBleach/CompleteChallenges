@@ -1,50 +1,105 @@
-﻿@model IEnumerable<Project.Models.Challenge>
+﻿
 
 @{
-    Layout = "_Layout";
+    Layout = "MainLayout";
 }
 
 <section>
-    <div class="container pt-4 pb-0 mb-2 d-flex justify-content-between">
-        <form class="d-flex">
-            <input class="form-control form-control-sm" placeholder="Поиск по названию" />
-            <button class="d-flex btn btn-action ms-1">
-                Применить
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="ms-1 mt-1 bi bi-search" viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                </svg>
-            </button>
-        </form>
-        <form class="d-flex">
-            <select class="form-select form-select-sm" aria-label="Default select example">
-                <option>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-            </select>
-            <button class="btn btn-action ms-1 d-flex">
-                Сортировать
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="ms-1 mt-1 bi bi-sort-down" viewBox="0 0 16 16">
-                    <path d="M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293V2.5zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z" />
-                </svg>
-            </button>
-        </form>
+    <div class="mb-4">
+        <div class="d-flex col-12 align-items-center">
+            <h4 class="mb-1 me-4">Задания сообщества</h4>
+
+            @if (ViewBag.About?.CountChallenges != null)
+            {
+                <span class="bold-mark me-4">
+                    Заданий: @ViewBag.CountChallenges
+                </span>
+            }
+
+            @if (ViewBag.About?.CountSolutions != null)
+            {
+                <span class="bold-mark me-4">
+                    Решений: @ViewBag.CountSolutions
+                </span>
+            }
+
+            @if (ViewBag.About?.CountComments != null)
+            {
+                <span class="bold-mark me-4">
+                    Комментариев: @ViewBag.CountComments
+                </span>
+            }
+        </div>
+        <div class="p-3 border rounded">
+            <div class="col-12 d-flex justify-content-around">
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                        Поиск заданий
+                    </button>
+                    <div class="dropdown-menu"
+                         aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+                <div class="col-8 overflow-hidden align-items-center justify-content-start d-flex">
+                    @if (ViewBag.PopularTags != null)
+                    {
+                        @foreach (var tag in ViewBag.PopularTags)
+                        {
+                            <a asp-action="index" asp-controller="challenge" asp-route-tag="@tag"><span class="me-2 tag">@tag</span></a>
+                        }
+                    }
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                        Поиск заданий
+                    </button>
+                    <div class="dropdown-menu"
+                         aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>
+            <hr class="m-0 mb-2" />
+            <!---->
+            @await Component.InvokeAsync("ChallengeList")
+            <!---->
+            <div class="col-12 d-flex justify-content-between">
+                <div class="btn-group mr-2"
+                     role="group"
+                     aria-label="First group">
+                    <a class="btn btn-light">1</a>
+                    <a disabled class="btn btn-light">
+                        2
+                    </a>
+                    <a class="btn btn-light">3</a>
+                </div>
+            </div>
+        </div>
     </div>
-    @await Component.InvokeAsync("ChallengeList")
 </section>
+
 @section scripts {
     <script type="text/javascript" src="~/dist/enlighterjs.min.js"></script>
     <script type="text/javascript">
-            // INIT CODE - simple page-wide initialization based on css selectors
-            // - highlight all pre + code tags (CSS3 selectors)
-            // - use javascript as default language
-            // - use theme "enlighter" as default theme
-            // - replace tabs with 2 spaces
-            EnlighterJS.init("pre", "code", {
-                language: "python, csharp",
-                theme: "bootstrap4",
-                indent: 2
-            });
+        EnlighterJS.init("pre", "code", {
+            language: "python, csharp",
+            theme: "bootstrap4",
+            indent: 2
+        });
     </script>
 }
-
