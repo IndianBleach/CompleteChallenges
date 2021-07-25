@@ -1,0 +1,24 @@
+﻿@model Project.Models.User
+
+<h5 class="section-d">Последние обсуждения</h5>
+@foreach (var item in Model.MyDiscusses)
+{
+<div class="mb-2 col-12 p-2 border rounded">
+    <div class="col-12">
+        <a><h5>@item.Name</h5></a>
+        <p class="mb-2 discuss-hide">
+            @item.Content
+        </p>
+    </div>
+    <div class="col-12 pe-2 ps-2 d-flex justify-content-between">
+        <div>
+            @if (item.Tags != null)
+            {@foreach (var tag in item.Tags)
+                {
+                    <span class="tag">@tag.Name</span>
+                }}
+        </div>
+        <p class="bold-mark">@item.Author.Username</p>
+    </div>
+</div>		 
+}

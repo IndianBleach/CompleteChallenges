@@ -1,100 +1,121 @@
 ﻿@model Project.Models.ValidModels.CreateChellange
 
 @{
-    Layout = "_Layout";
+    Layout = "MainLayout";
 }
 
-
-<div class="container border rounded bg-white ps-3 pe-3 pb-2">
-    <div class="col-12 pt-4 text-center">
-        <h4 class="tbig">
-            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="me-2 bi bi-hammer" viewBox="0 0 16 16">
-                <path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5.009 5.009 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334z" />
-            </svg>Ваша собственная мастерская
-        </h4>
-        <p class="tsmall mb-2">Создавайте свои собственные задания именно здесь</p>
-    </div>
-    <form class="col-12" asp-action="create" asp-controller="challenge" method="post">
-        <div class="col-12 d-flex bg-light p-2 border rounded">
-            <div class="col-6">
-                <label asp-for="Name" class="tsmall">Название</label>
-                <input asp-for="Name" class="form-control form-control-sm" placeholder="Помогите Бобу посчитать кол-во мест на стадионе" />
-                <label asp-for="Description" class="mt-2 tsmall">Описание</label>
-                <textarea asp-for="Description" class="form-left-block form-control form-control-sm">                  
-                  </textarea>
-                <label asp-for="Level" class="mt-2 tsmall">Уровень сложности</label>
-                <select asp-for="Level" class="form-select form-select-sm">
-                    @if (ViewBag.Levels != null)
-                    {
-                        @foreach (var item in ViewBag.Levels)
-                        {
-                            <option>@item.Name</option>
-                        }
-                    }
-                </select>
-                <label asp-for="Tags" class="tsmall mt-2">Несколько тегов на эту тему</label>
-                <select asp-for="Tags" multiple class="form-left-block form-select form-select-sm">
-                    @if (ViewBag.Tags != null)
-                    {
-                        @foreach (var item in ViewBag.Tags)
-                        {
-                            <option>@item.Name</option>
-                        }
-                    }
-                </select>
-            </div>
-            <div class="col-6 ps-2">
-                <label class="tsmall" asp-for="PythonTest">Python тест</label>
-                <textarea asp-for="PythonTest" class="form-test form-control form-control-sm">                  
-                  </textarea>
-                <label asp-for="CsharpTest" class="tsmall">Csharp тест</label>
-                <textarea asp-for="CsharpTest" class="form-test form-control form-control-sm">                  
-                  </textarea>
-            </div>
+<section>
+    <div class="mb-4">
+        <div class="d-flex col-12 align-items-center">
+            <h4 class="mb-1 me-4">Создать собственное задание</h4>
         </div>
-        <div class="col-12 text-center mt-2">
-            <button class="btn btn-submit">Опубликовать задание</button>
+        <div class="col-12 border rounded p-2">
+            <h5 class="section-d mb-2">
+                Прежде чем создать задание, убедитесь в его корректности, другие
+                смогут выполнить его исключительно по вашим тестам
+            </h5>
+            <p class="mark">
+                Оставьте поле с тестом пустым, если данный язык для задания не
+                требуется
+            </p>
+            <form class="col-12"
+                  asp-action="create"
+                  asp-controller="challenge"
+                  method="post">
+                <div class="col-12 d-flex p-2">
+                    <div class="col-6">
+                        <label asp-for="Name" class="tsmall bold-mark">Название</label>
+                        <input asp-for="Name"
+                               class="form-control form-control-sm"
+                               placeholder="Помогите Бобу посчитать кол-во мест на стадионе" />
+                        <label asp-for="Description" class="bold-mark mt-3 tsmall">Описание</label>
+                        <textarea rows="4"
+                                  asp-for="Description"
+                                  class="form-left-block form-control form-control-sm">
+                    </textarea>
+                        <label asp-for="Level" class="bold-mark mt-3 tsmall">Уровень сложности</label>
+                        <select asp-for="Level" class="form-select form-select-sm">
+                            @if (ViewBag.Levels != null)
+                            {@foreach (var item in
+ViewBag.Levels)
+                                {
+                                    <option>@item.Name</option>
+                                }}
+                        </select>
+                        <label asp-for="Tags" class="bold-mark tsmall mt-3">Несколько тегов на эту тему</label>
+                        <select asp-for="Tags"
+                                multiple
+                                class="form-left-block form-select form-select-sm">
+                            @if (ViewBag.Tags != null)
+                            {@foreach (var item in
+ViewBag.Tags)
+                                {
+                                    <option>@item.Name</option>
+                                }}
+                        </select>
+                    </div>
+                    <div class="col-6 ps-2">
+                        <label class="bold-mark tsmall" asp-for="PythonTest">Python тест</label>
+                        <textarea asp-for="PythonTest"
+                                  class="form-test form-control form-control-sm">
+                    </textarea>
+                        <label asp-for="CsharpTest" class="bold-mark mt-3 tsmall">Csharp тест</label>
+                        <textarea asp-for="CsharpTest"
+                                  class="form-test form-control form-control-sm">
+                    </textarea>
+                    </div>
+                </div>
+                <div class="col-12 text-center mt-3">
+                    <button class="btn btn-success">Опубликовать задание</button>
+                </div>
+            </form>
         </div>
-    </form>
-    <div class="col-12 mt-4">
-        <div class="col-12 text-center">
-            <h4 class="tbig">Примеры тестов</h4>
-        </div>
-        <div class="col-12 d-flex">
-            <div class="col-6 border rounded ps-2">
-                <p class="tspecial mb-0">Python</p>
-                <div class="test_example mt-0 border col-12 bg-light rounded">
-                    <pre data-enlighter-language="less"
-                         class="pb-0 mb-0 position-absolute">
-qwdqdqd
-                    </pre>
+        <div class="col-12 mt-4">
+            <h4>Примеры тестов</h4>
+            <div class="d-flex col-12 p-2 border rounded">
+                <div class="col-6">
+                    <p class="bold-mark mb-2 ms-2">Python</p>
+                    <div class="col-12 bg-light test-example rounded border">
+                        <pre data-enlighter-language="less"
+                             class="pb-0 mb-0 position-absolute">
+tests = [
+    [Summ(1,10), 11],
+    [Summ(1,15), 16],
+    [Summ(-1,10), 9],
+    [Summ(-5,9), 4],
+    [Summ(-10,10), 0],
+    [Summ(1,0), 1],
+    [Summ(1,1), 2],
+]
+                 </pre>
+                    </div>
+                </div>
+                <div class="col-6 ms-1">
+                    <p class="bold-mark mb-2 ms-2">Csharp</p>
+                    <div class="col-12 bg-light test-example rounded border">
+                        <pre data-enlighter-language="less"
+                             class="pb-0 mb-0 position-absolute">
+int[][] tests = new int [][] {
+    new int[] {Summ(1,15), 16},
+    new int[] {Summ(4,10), 14},
+    new int[] {Summ(-24,10), -14},
+    new int[] {Summ(1,4), 5},
+    new int[] {Summ(1,10), 11},
+    new int[] {Summ(3,2), 5},
+    new int[] {Summ(23,653), 676},
+}
+                 </pre>
+                    </div>
                 </div>
             </div>
-            <div class="col-6 border rounded ps-2">
-                <p class="tspecial mb-0">Python</p>
-                <div class="test_example mt-0 border col-12 bg-light rounded">
-                    <pre data-enlighter-language="less"
-                         class="pb-0 mb-0 position-absolute">
-qwdqwwqd
-                    </pre>
-                </div>
-            </div>
         </div>
     </div>
-</div>
-
-
-
+</section>
 
 
 @section scripts {
     <script type="text/javascript" src="~/dist/enlighterjs.min.js"></script>
     <script type="text/javascript">
-            // INIT CODE - simple page-wide initialization based on css selectors
-            // - highlight all pre + code tags (CSS3 selectors)
-            // - use javascript as default language
-            // - use theme "enlighter" as default theme
-            // - replace tabs with 2 spaces
             EnlighterJS.init("pre", "code", {
                 language: "python",
                 theme: "bootstrap4",

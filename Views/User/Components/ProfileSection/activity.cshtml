@@ -1,15 +1,7 @@
 ﻿@model Project.Models.User
 
-@{
-    ViewData["Title"] = "Активность";
-    Layout = "ProfileLayout";
-}
-
-<div class="col-12 pt-4">
-    <div class="col-12 text-center">
-        <h4 class="tbig">Лента активности</h4>
-        <p class="tsmall text-secondary">В ней отмечаются дни и все события, когда автор создал, либо выполнил задание.</p>
-    </div>
+<h5 class="section-d">Лента активности</h5>
+<div class="col-12 mb-4">
     <div id="profileActivityBlock"
          class="overflow-hidden d-flex justify-content-end position-relative bg-white pt-2 pb-2 border rounded ms-4">
         <div class="col justify-content-end position-absolute min-content">
@@ -72,7 +64,3 @@
         </div>
     </div>
 </div>
-
-@section scripts {
-    <script type="text/javascript" src="~/js/buildUserActivityBlock.js"></script>
-}

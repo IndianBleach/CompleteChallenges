@@ -1,0 +1,21 @@
+﻿@model Project.Models.User
+
+<h5 class="section-d">Последние решения</h5>
+@foreach (var item in Model.MySolutions)
+{
+    <div class="col-12 mb-2 solution-card border rounded p-2">
+        <div class="col-12 d-flex justify-content-between pe-2 ps-2">
+            <p class="bold-mark mb-2">
+                @item.Challenge.Name
+                <span class="ms-2 mark">@item.ProgLanguage.Name</span>
+            </p>
+            <span class="bold-mark text-muted">@item.DateCreated</span>
+        </div>
+        <div class="bg-light border rounded overflow-scroll">
+            <pre data-enlighter-language="less"
+                 class="pb-0 mb-0 position-absolute">
+    @item.SolutionContent
+                      </pre>
+        </div>
+    </div>
+}

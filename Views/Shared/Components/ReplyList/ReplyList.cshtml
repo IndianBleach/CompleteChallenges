@@ -1,0 +1,11 @@
+﻿@model Project.Models.Discuss
+
+@foreach (var item in Model.Replies.OrderByDescending(x => x.DateCreated))
+{
+    <div class="col-12 mb-2 border rounded p-2">
+        <p class="mb-0 bold-mark">@item.Author.Username</p>
+        <p class="mb-0">
+            @item.Content
+        </p>
+    </div>
+}
